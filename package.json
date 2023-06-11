@@ -19,7 +19,11 @@
   },
   "homepage": "https://github.com/WaringWeraWanua/DukunganDemensia-BE#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "@prisma/client": "^4.15.0",
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "prisma": "^4.15.0",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/express": "^4.17.17",

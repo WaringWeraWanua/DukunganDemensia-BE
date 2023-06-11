@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  username    String @unique
+  email       String @unique
+  name        String
+  password    String
+  salt        String
+  phoneNumber String
+  role        Role   @default(USER)
+
+  careId       String
+  CareRelation CareRelation[] @relation(name: "careGiver")
+
+  patientId       String
+  PatientRelation CareRelation[] @relation(name: "patient")
+
+  location Location?
+}
+
+model Location {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  latitude  Float
+  longitude Float
+
+  patientId String @unique
+  Patient   User   @relation(fields: [patientId], references: [id])
+}
+
+model CareRelation {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  careGiver   User   @relation(name: "careGiver", fields: [careGiverId], references: [id])
+  careGiverId String
+
+  patient   User   @relation(name: "patient", fields: [patientId], references: [id])
+  patientId String
+
+  events Event[]
+}
+
+model News {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title    String
+  content  String
+  imageUrl String
+}
+
+model Event {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title          String
+  description    String
+  startTime      DateTime
+  endTime        DateTime
+  startNotifTime DateTime
+
+  proofImageUrl String
+  doneTime      DateTime?
+
+  careRelationId String
+  CareRelation   CareRelation @relation(fields: [careRelationId], references: [id])
+}
