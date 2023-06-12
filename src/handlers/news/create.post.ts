@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { newsUsecase } from "../../usecases";
-import { CreateNewsSchema } from "../../contracts";
-import { CreateNewsResponse } from "../../contracts";
+import { CreateNewsSchema, CreateNewsResponse } from "../../contracts";
 
 export const create = async (req: Request, res: Response) => {
   const parsed = CreateNewsSchema.safeParse(req.body);
