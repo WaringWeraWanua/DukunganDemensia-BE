@@ -11,8 +11,9 @@ datasource db {
 }
 
 enum Role {
-  USER
   ADMIN
+  CARE_GIVER
+  PATIENT
 }
 
 model User {
@@ -25,7 +26,7 @@ model User {
   name        String
   password    String
   phoneNumber String
-  role        Role   @default(USER)
+  role        Role   @default(CARE_GIVER)
 
   CareRelation CareRelation[] @relation(name: "careGiver")
   PatientRelation CareRelation[] @relation(name: "patient")

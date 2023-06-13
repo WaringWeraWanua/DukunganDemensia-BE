@@ -39,8 +39,18 @@ export class UserRepo {
       },
     });
   }
+
+  async findByUsername(username: string) {
+    return await this.prisma.user.findFirst({
+      where: {
+        username,
+      },
+    });
+  }
 }
 
-export type IUserRepo = Repo<UserModel>;
+export type IUserRepo = Repo<UserModel> & {
+  findByUsername: (username: string) => Promise<UserModel | null>;
+};
 
 export const userRepo: IUserRepo = new UserRepo();

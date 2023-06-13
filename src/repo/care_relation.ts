@@ -23,6 +23,22 @@ export class CareRelationRepo {
     });
   }
 
+  async findByPatientId(patientId: string) {
+    return await this.prisma.careRelation.findFirst({
+      where: {
+        patientId,
+      },
+    });
+  }
+
+  async findByCareGiverId(careGiverId: string) {
+    return await this.prisma.careRelation.findMany({
+      where: {
+        careGiverId,
+      },
+    });
+  }
+
   async update(data: OptionalCareRelationModel) {
     return await this.prisma.careRelation.update({
       where: {
@@ -41,6 +57,9 @@ export class CareRelationRepo {
   }
 }
 
-export type ICareRelationRepo = Repo<CareRelationModel>;
+export type ICareRelationRepo = Repo<CareRelationModel> & {
+  findByPatientId(patientId: string): Promise<CareRelationModel | null>;
+  findByCareGiverId(careGiverId: string): Promise<CareRelationModel[]>;
+};
 
 export const careRelationRepo: ICareRelationRepo = new CareRelationRepo();

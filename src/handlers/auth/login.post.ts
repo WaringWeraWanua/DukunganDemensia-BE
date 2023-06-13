@@ -29,6 +29,7 @@ export const login = async (req: Request, res: Response) => {
     };
     res.json(response);
   } catch (err) {
+    console.log(err);
     res.status(401).send("Please authenticate");
   }
 };

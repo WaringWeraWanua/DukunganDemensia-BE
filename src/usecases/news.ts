@@ -1,5 +1,5 @@
 import { NewsModel, OptionalNewsModel } from "../models";
-import { INewsRepo, newsRepo } from "../repo/news";
+import { INewsRepo, newsRepo } from "../repo";
 
 export class NewsUsecase {
   private newsRepo: INewsRepo = newsRepo;

@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
+CREATE TYPE "Role" AS ENUM ('ADMIN', 'CARE_GIVER', 'PATIENT');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -10,11 +10,8 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "salt" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
-    "role" "Role" NOT NULL DEFAULT 'USER',
-    "careId" TEXT NOT NULL,
-    "patientId" TEXT NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'CARE_GIVER',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -64,6 +61,7 @@ CREATE TABLE "Event" (
     "startTime" TIMESTAMP(3) NOT NULL,
     "endTime" TIMESTAMP(3) NOT NULL,
     "startNotifTime" TIMESTAMP(3) NOT NULL,
+    "endNotifTime" TIMESTAMP(3) NOT NULL,
     "proofImageUrl" TEXT NOT NULL,
     "doneTime" TIMESTAMP(3),
     "careRelationId" TEXT NOT NULL,

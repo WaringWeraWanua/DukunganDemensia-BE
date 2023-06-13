@@ -23,7 +23,7 @@ export const ReqRegisterSchema = z.object({
   password: z.string(),
   phoneNumber: z.string(),
   careId: z.string().or(z.null()),
-  role: z.enum([Role.ADMIN, Role.USER]),
+  role: z.enum([Role.ADMIN, Role.PATIENT, Role.CARE_GIVER]),
   careGiverId: z.string().or(z.null()),
 });
 

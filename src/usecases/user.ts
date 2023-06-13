@@ -6,9 +6,9 @@ import {
   careRelationRepo,
 } from "../repo";
 import { Role } from "@prisma/client";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { CONFIG } from "../configs";
+import { hash, verifyHash } from "../utils";
 
 export class UserUsecase {
   private userRepo: IUserRepo = userRepo;
@@ -38,8 +38,11 @@ export class UserUsecase {
     const { username, password, name, email, phoneNumber, role, careGiverId } =
       params;
 
-    const salt = await bcrypt.genSalt(CONFIG.SALT_ROUNDS);
-    const hashed = await bcrypt.hash(password, salt);
+    if (!careGiverId && role === Role.PATIENT) {
+      throw new Error("CareGiverId is required");
+    }
+
+    const { hashed } = await hash(password);
 
     const user = await this.userRepo.create({
       username,
@@ -63,13 +66,13 @@ export class UserUsecase {
   async login(params: ILoginParams) {
     const { username, password } = params;
 
-    const user = await this.userRepo.findOne(username);
+    const user = await this.userRepo.findByUsername(username);
 
     if (!user) {
       throw new Error("User not found");
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await verifyHash(password, user.password);
 
     if (!isMatch) {
       throw new Error("Password not match");
