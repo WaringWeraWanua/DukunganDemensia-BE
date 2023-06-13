@@ -5,4 +5,5 @@ export interface IHandler {
   path: string;
   method: REST_METHOD_VALUES;
   handler: RequestHandler;
+  middlewares: RequestHandler[];
 }

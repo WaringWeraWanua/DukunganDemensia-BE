@@ -7,5 +7,12 @@ export const authHandler: IHandler[] = [
     path: BASE_PATH.AUTH + "/login",
     method: REST_METHOD.POST,
     handler: login,
+    middlewares: [],
   },
+  {
+    path: BASE_PATH.AUTH + "/register",
+    method: REST_METHOD.POST,
+    handler: login,
+    middlewares: [],
+  }
 ];

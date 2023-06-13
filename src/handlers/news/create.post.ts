@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { newsUsecase } from "../../usecases";
-import { CreateNewsSchema, CreateNewsResponse } from "../../contracts";
+import { ReqCreateNewsSchema, RespCreateNews } from "../../contracts";
 
 export const create = async (req: Request, res: Response) => {
-  const parsed = CreateNewsSchema.safeParse(req.body);
+  const parsed = ReqCreateNewsSchema.safeParse(req.body);
 
   if (!parsed.success) {
-    const response: CreateNewsResponse = {
+    const response: RespCreateNews = {
       success: false,
       message: "Invalid request body",
       error: parsed.error.message,
@@ -17,7 +17,7 @@ export const create = async (req: Request, res: Response) => {
   }
 
   const news = await newsUsecase.create(parsed.data);
-  const response: CreateNewsResponse = {
+  const response: RespCreateNews = {
     success: true,
     data: news,
     message: "News created successfully",

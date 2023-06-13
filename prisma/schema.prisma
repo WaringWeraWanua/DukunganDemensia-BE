@@ -24,14 +24,10 @@ model User {
   email       String @unique
   name        String
   password    String
-  salt        String
   phoneNumber String
   role        Role   @default(USER)
 
-  careId       String
   CareRelation CareRelation[] @relation(name: "careGiver")
-
-  patientId       String
   PatientRelation CareRelation[] @relation(name: "patient")
 
   location Location?
