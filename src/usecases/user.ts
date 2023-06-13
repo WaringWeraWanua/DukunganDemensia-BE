@@ -105,7 +105,7 @@ export type IRegisterParams = {
   email: string;
   phoneNumber: string;
   role: Role;
-  careGiverId: string | null;
+  careGiverId?: string;
 };
 
 export type IUserUsecase = {

@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 
-import { authHandler, newsHandler, IHandler } from "./handlers";
+import { authHandler, newsHandler, locationHandler, eventHandler, IHandler } from "./handlers";
 import { wrapper } from "./utils";
 import { REST_METHOD } from "./constants";
 
@@ -63,6 +63,8 @@ app.get("/health", (req: Request, res: Response) => {
 
 registerRoutes(app, authHandler);
 registerRoutes(app, newsHandler);
+registerRoutes(app, locationHandler);
+registerRoutes(app, eventHandler);
 
 app.use(errorMiddleware);
 

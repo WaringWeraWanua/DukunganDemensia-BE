@@ -23,6 +23,14 @@ export class EventRepo {
     });
   }
 
+  async findManyFilter(params: { careRelationId?: string }) {
+    return await this.prisma.event.findMany({
+      where: {
+        careRelationId: params.careRelationId,
+      },
+    });
+  }
+
   async update(data: OptionalEventModel) {
     return await this.prisma.event.update({
       where: {
@@ -51,6 +59,8 @@ export class EventRepo {
   }
 }
 
-export type IEventRepo = Repo<EventModel>;
+export type IEventRepo = Repo<EventModel> & {
+  findManyFilter(params: { careRelationId?: string }): Promise<EventModel[]>;
+};
 
 export const eventRepo: IEventRepo = new EventRepo();
