@@ -11,6 +11,7 @@ export type REST_METHOD_VALUES = typeof REST_METHOD[REST_METHOD_KEYS]
 export const BASE_PATH = {
   AUTH: "/auth",
   NEWS: "/news",
+  LOCATION: "/location",
 } as const;
 
 export type BASE_PATH_KEYS = keyof typeof BASE_PATH

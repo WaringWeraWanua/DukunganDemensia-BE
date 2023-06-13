@@ -39,8 +39,28 @@ export class LocationRepo {
       },
     });
   }
+
+  async upsert(data: OptionalLocationModel) {
+    return await this.prisma.location.upsert({
+      where: {
+        id: data.id,
+      },
+      create: data,
+      update: data,
+    });
+  }
+
+  async findFirst(params: { patientId?: string }) {
+    return await this.prisma.location.findFirst({
+      where: {
+        patientId: params.patientId,
+      },
+    });
+  }
 }
 
-export type ILocationRepo = Repo<LocationModel>;
+export type ILocationRepo = Repo<LocationModel> & {
+  findFirst(params: { patientId?: string }): Promise<LocationModel | null>;
+};
 
 export const locationRepo: ILocationRepo = new LocationRepo();

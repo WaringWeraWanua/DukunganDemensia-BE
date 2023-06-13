@@ -39,6 +39,16 @@ export class NewsRepo {
       },
     });
   }
+
+  async upsert(data: OptionalNewsModel) {
+    return await this.prisma.news.upsert({
+      where: {
+        id: data.id,
+      },
+      create: data,
+      update: data,
+    });
+  }
 }
 
 export type INewsRepo = Repo<NewsModel>;

@@ -39,6 +39,16 @@ export class EventRepo {
       },
     });
   }
+
+  async upsert(data: OptionalEventModel) {
+    return await this.prisma.event.upsert({
+      where: {
+        id: data.id,
+      },
+      create: data,
+      update: data,
+    });
+  }
 }
 
 export type IEventRepo = Repo<EventModel>;

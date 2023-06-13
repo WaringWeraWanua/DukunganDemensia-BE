@@ -47,6 +47,16 @@ export class UserRepo {
       },
     });
   }
+
+  async upsert(user: OptionalUserModel) {
+    return await this.prisma.user.upsert({
+      where: {
+        id: user.id,
+      },
+      create: user,
+      update: user,
+    });
+  }
 }
 
 export type IUserRepo = Repo<UserModel> & {

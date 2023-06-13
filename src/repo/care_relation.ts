@@ -55,6 +55,16 @@ export class CareRelationRepo {
       },
     });
   }
+
+  async upsert(data: OptionalCareRelationModel) {
+    return await this.prisma.careRelation.upsert({
+      where: {
+        id: data.id,
+      },
+      create: data,
+      update: data,
+    });
+  }
 }
 
 export type ICareRelationRepo = Repo<CareRelationModel> & {

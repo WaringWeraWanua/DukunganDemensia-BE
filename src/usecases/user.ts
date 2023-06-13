@@ -9,6 +9,7 @@ import { Role } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { CONFIG } from "../configs";
 import { hash, verifyHash } from "../utils";
+import { IUserMiddleware } from "../middlewares";
 
 export class UserUsecase {
   private userRepo: IUserRepo = userRepo;
@@ -78,14 +79,12 @@ export class UserUsecase {
       throw new Error("Password not match");
     }
 
-    const token = jwt.sign(
-      {
-        id: user.id,
-        username: user.username,
-        role: user.role,
-      },
-      CONFIG.SECRET_KEY
-    );
+    const contentToken: IUserMiddleware = {
+      id: user.id,
+      username: user.username,
+      role: user.role,
+    };
+    const token = jwt.sign(contentToken, CONFIG.SECRET_KEY);
 
     return {
       user,

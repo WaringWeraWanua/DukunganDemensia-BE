@@ -6,4 +6,5 @@ export interface Repo<T extends Model> {
   findOne: (id: string) => Promise<T | null>;
   update: (data: OptionalGenerated<T>) => Promise<T>;
   delete: (id: string) => Promise<T>;
+  upsert: (data: OptionalGenerated<T>) => Promise<T>;
 }

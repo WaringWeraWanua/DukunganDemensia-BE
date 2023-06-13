@@ -23,6 +23,16 @@ export class LocationUsecase {
   async findOne(id: string) {
     return await this.locationRepo.findOne(id);
   }
+
+  async upsert(data: OptionalLocationModel) {
+    return await this.locationRepo.upsert(data);
+  }
+
+  async findPatientLocation(patientId: string) {
+    return await this.locationRepo.findFirst({
+      patientId,
+    });
+  }
 }
 
 export type ILocationUsecase = {
@@ -31,6 +41,8 @@ export type ILocationUsecase = {
   delete: (id: string) => Promise<LocationModel>;
   findMany: () => Promise<LocationModel[]>;
   findOne: (id: string) => Promise<LocationModel | null>;
+  upsert: (data: OptionalLocationModel) => Promise<LocationModel>;
+  findPatientLocation: (patientId: string) => Promise<LocationModel | null>;
 };
 
 export const locationUsecase: ILocationUsecase = new LocationUsecase();
