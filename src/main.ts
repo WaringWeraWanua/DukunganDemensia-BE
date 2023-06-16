@@ -71,6 +71,7 @@ const meta = {
 } as const;
 
 app.use(bodyParser.json());
+app.use(morgan("dev"))
 
 app.get("/health", (req: Request, res: Response) => {
   res.send("This server has been started since " + meta.startTime);
