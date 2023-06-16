@@ -23,7 +23,7 @@ export const ReqRegisterSchema = z.object({
   password: z.string(),
   phoneNumber: z.string(),
   role: z.enum([Role.ADMIN, Role.PATIENT, Role.CARE_GIVER]),
-  careGiverId: z.string().or(z.undefined()),
+  careGiverUsername: z.string().or(z.undefined()),
 });
 
 export type ReqRegisterSchemaType = z.infer<typeof ReqRegisterSchema>;

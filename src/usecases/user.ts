@@ -36,11 +36,18 @@ export class UserUsecase {
   }
 
   async register(params: IRegisterParams) {
-    const { username, password, name, email, phoneNumber, role, careGiverId } =
-      params;
+    const {
+      username,
+      password,
+      name,
+      email,
+      phoneNumber,
+      role,
+      careGiverUsername,
+    } = params;
 
-    if (!careGiverId && role === Role.PATIENT) {
-      throw new Error("CareGiverId is required");
+    if (!careGiverUsername && role === Role.PATIENT) {
+      throw new Error("CareGiverId is required for patient");
     }
 
     const { hashed } = await hash(password);
@@ -54,9 +61,15 @@ export class UserUsecase {
       role,
     });
 
-    if (careGiverId) {
+    if (careGiverUsername) {
+      const careGiver = await this.userRepo.findByUsername(careGiverUsername);
+
+      if (!careGiver) {
+        throw new Error("CareGiver not found");
+      }
+
       await this.careRelationRepo.create({
-        careGiverId,
+        careGiverId: careGiver.id,
         patientId: user.id,
       });
     }
@@ -105,7 +118,7 @@ export type IRegisterParams = {
   email: string;
   phoneNumber: string;
   role: Role;
-  careGiverId?: string;
+  careGiverUsername?: string;
 };
 
 export type IUserUsecase = {
