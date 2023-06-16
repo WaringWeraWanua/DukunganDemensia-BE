@@ -3,6 +3,7 @@ export const REST_METHOD = {
   POST: "post",
   PUT: "put",
   DELETE: "delete",
+  PATCH: "patch",
 } as const;
 
 export type REST_METHOD_KEYS = keyof typeof REST_METHOD

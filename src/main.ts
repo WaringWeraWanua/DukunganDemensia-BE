@@ -1,7 +1,13 @@
 import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 
-import { authHandler, newsHandler, locationHandler, eventHandler, IHandler } from "./handlers";
+import {
+  authHandler,
+  newsHandler,
+  locationHandler,
+  eventHandler,
+  IHandler,
+} from "./handlers";
 import { wrapper } from "./utils";
 import { REST_METHOD } from "./constants";
 
@@ -37,6 +43,14 @@ const registerRoutes = (app: Express, handlers: IHandler[]) => {
         break;
       case REST_METHOD.DELETE:
         app.delete(
+          handler.path,
+          ...MAP_MIDDLEWARES.DEFAULT_MIDDLEWARES,
+          ...handler.middlewares,
+          wrapper(handler.handler)
+        );
+        break;
+      case REST_METHOD.PATCH:
+        app.patch(
           handler.path,
           ...MAP_MIDDLEWARES.DEFAULT_MIDDLEWARES,
           ...handler.middlewares,

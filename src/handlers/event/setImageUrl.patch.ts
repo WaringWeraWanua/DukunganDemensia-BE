@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { eventUsecase, careRelationUsecase } from "../../usecases";
 import { ReqSetImageUrlSchema, RespCreateEvent } from "../../contracts";
-import { OptionalEventModel } from "../../models";
 import { IUserMiddleware } from "../../middlewares";
 import { Role } from "@prisma/client";
 
@@ -17,8 +16,9 @@ export const setImageUrl = async (req: Request, res: Response) => {
     return;
   }
 
-  const parsed = ReqSetImageUrlSchema.safeParse(req.body);
+  const eventId = req.params.id;
 
+  const parsed = ReqSetImageUrlSchema.safeParse(req.body);
   if (!parsed.success) {
     const response: RespCreateEvent = {
       success: false,
@@ -29,7 +29,10 @@ export const setImageUrl = async (req: Request, res: Response) => {
     return;
   }
 
-  const updated = await eventUsecase.updateImageUrl(parsed.data);
+  const updated = await eventUsecase.updateImageUrl({
+    eventId,
+    imageUrl: parsed.data.imageUrl,
+  });
   if (!updated) {
     const response: RespCreateEvent = {
       success: false,

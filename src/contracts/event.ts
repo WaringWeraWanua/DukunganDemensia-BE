@@ -23,7 +23,6 @@ export type RespCreateEvent = BaseResponse<RespCreateEventData>;
 
 export const ReqSetImageUrlSchema = z.object({
   imageUrl: z.string(),
-  eventId: z.string(),
 });
 export type ReqSetImageUrlType = z.infer<typeof ReqSetImageUrlSchema>;
 
