@@ -1,3 +1,4 @@
+import { IUserMiddleware } from "../middlewares";
 import { CareRelationModel, OptionalCareRelationModel } from "../models";
 import { ICareRelationRepo, careRelationRepo } from "../repo";
 
@@ -31,6 +32,20 @@ export class CareRelationUsecase {
   async findByCareGiverId(careGiverId: string) {
     return await this.careRelationRepo.findByCareGiverId(careGiverId);
   }
+
+  async findByUserMiddleware(userMiddleare: IUserMiddleware) {
+    switch (userMiddleare.role) {
+      case "PATIENT": {
+        return await this.findByPatientId(userMiddleare.id);
+      }
+      case "CARE_GIVER": {
+        return await this.findByCareGiverId(userMiddleare.id);
+      }
+      default: {
+        return null;
+      }
+    }
+  }
 }
 
 export type ICareRelationUsecase = {
@@ -41,6 +56,9 @@ export type ICareRelationUsecase = {
   findOne: (id: string) => Promise<CareRelationModel | null>;
   findByPatientId: (patientId: string) => Promise<CareRelationModel | null>;
   findByCareGiverId: (careGiverId: string) => Promise<CareRelationModel | null>;
+  findByUserMiddleware(
+    userMiddleare: IUserMiddleware
+  ): Promise<CareRelationModel | null>;
 };
 
 export const careRelationUsecase: ICareRelationUsecase =

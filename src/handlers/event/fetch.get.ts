@@ -2,40 +2,27 @@ import { Request, Response } from "express";
 import { IUserMiddleware } from "../../middlewares";
 import { RespFetchEvent } from "../../contracts/event";
 import { careRelationUsecase, eventUsecase } from "../../usecases";
-import { Role } from "@prisma/client";
-
-const findCareRelation = async (user: IUserMiddleware) => {
-  switch (user.role) {
-    case Role.CARE_GIVER: {
-      const careRelation = await careRelationUsecase.findByCareGiverId(user.id);
-      if (!careRelation) {
-        return null;
-      }
-      return careRelation;
-    }
-    case Role.PATIENT: {
-      const careRelation = await careRelationUsecase.findByPatientId(user.id);
-      if (!careRelation) {
-        return null;
-      }
-      return careRelation;
-    }
-    default: {
-      return null;
-    }
-  }
-};
 
 export const fetch = async (req: Request, res: Response) => {
   const user: IUserMiddleware | undefined = req.body.user;
   if (!user) {
-    res.status(401).send("Please authenticate");
+    const response: RespFetchEvent = {
+      success: false,
+      message: "Please authenticate",
+      error: "Please authenticate",
+    }
+    res.status(401).json(response);
     return;
   }
 
-  const careRelation = await findCareRelation(user);
+  const careRelation = await careRelationUsecase.findByUserMiddleware(user);
   if (!careRelation) {
-    res.status(404).send("No patient found");
+    const response: RespFetchEvent = {
+      success: false,
+      message: "No patient found",
+      error: "No patient found",
+    }
+    res.status(404).json(response);
     return;
   }
 
@@ -50,6 +37,5 @@ export const fetch = async (req: Request, res: Response) => {
     },
     message: "Get events successfully",
   };
-
   res.json(response);
 };

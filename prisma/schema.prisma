@@ -81,7 +81,7 @@ model Event {
   endTime        DateTime
   startNotifTime DateTime
 
-  proofImageUrl String
+  proofImageUrl String?
   doneTime      DateTime?
 
   careRelationId String

@@ -25,7 +25,17 @@ export class EventUsecase {
   }
 
   async findByCareRelationId(careRelationId: string) {
-    return await this.eventRepo.findManyFilter({ careRelationId }); 
+    return await this.eventRepo.findManyFilter({ careRelationId });
+  }
+
+  async updateImageUrl(params: { imageUrl: string; eventId: string }) {
+    const event = await this.findOne(params.eventId);
+    if (!event) {
+      return null;
+    }
+
+    event.proofImageUrl = params.imageUrl;
+    return await this.update(event);
   }
 }
 
@@ -36,6 +46,10 @@ export type IEventUsecase = {
   findMany: () => Promise<EventModel[]>;
   findOne: (id: string) => Promise<EventModel | null>;
   findByCareRelationId: (careRelationId: string) => Promise<EventModel[]>;
+  updateImageUrl(params: {
+    imageUrl: string;
+    eventId: string;
+  }): Promise<EventModel | null>;
 };
 
 export const eventUsecase: IEventUsecase = new EventUsecase();

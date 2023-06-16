@@ -6,6 +6,7 @@ import { wrapper } from "./utils";
 import { REST_METHOD } from "./constants";
 
 import { MAP_MIDDLEWARES, errorMiddleware } from "./middlewares";
+import morgan from "morgan";
 
 const registerRoutes = (app: Express, handlers: IHandler[]) => {
   handlers.forEach((handler) => {
