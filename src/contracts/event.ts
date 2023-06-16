@@ -28,3 +28,12 @@ export type ReqSetImageUrlType = z.infer<typeof ReqSetImageUrlSchema>;
 
 export type RespSetImageUrlData = EventModel;
 export type RespSetImageUrl = BaseResponse<RespSetImageUrlData>;
+
+
+export const ReqSetDoneTimeUrlSchema = z.object({
+  imageUrl: z.string(),
+});
+export type ReqSetDoneTimeUrlType = z.infer<typeof ReqSetImageUrlSchema>;
+
+export type RespSetDoneTimeData = EventModel;
+export type RespSetDoneTime = BaseResponse<RespSetImageUrlData>;

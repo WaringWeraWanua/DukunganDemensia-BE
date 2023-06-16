@@ -1,8 +1,10 @@
 import { EventModel, OptionalEventModel } from "../models";
 import { IEventRepo, eventRepo } from "../repo";
+import { ICareRelationUsecase, careRelationUsecase } from "../usecases";
 
 export class EventUsecase {
   private eventRepo: IEventRepo = eventRepo;
+  private careRelationUsecase: ICareRelationUsecase = careRelationUsecase;
 
   async create(data: OptionalEventModel) {
     return await this.eventRepo.create(data);
@@ -28,13 +30,47 @@ export class EventUsecase {
     return await this.eventRepo.findManyFilter({ careRelationId });
   }
 
-  async updateImageUrl(params: { imageUrl: string; eventId: string }) {
+  async updateImageUrl(params: {
+    patientId: string;
+    imageUrl: string;
+    eventId: string;
+  }) {
     const event = await this.findOne(params.eventId);
     if (!event) {
       return null;
     }
 
+    const careRelation = await this.careRelationUsecase.findByPatientId(
+      params.patientId
+    );
+    if (!careRelation || careRelation.patientId !== params.patientId) {
+      return null;
+    }
+
     event.proofImageUrl = params.imageUrl;
+    return await this.update(event);
+  }
+
+  async updateDoneTime(params: {
+    careGiverId: string;
+    doneTime: Date;
+    eventId: string;
+  }) {
+    const event = await this.findOne(params.eventId);
+    if (!event) {
+      return null;
+    }
+
+    const careRelation = await this.careRelationUsecase.findByCareGiverId(
+      params.careGiverId
+    );
+    if (!careRelation || careRelation.careGiverId !== params.careGiverId) {
+      return null;
+    }
+
+    // TODO: validate whether the done time has been set before
+
+    event.doneTime = params.doneTime;
     return await this.update(event);
   }
 }
@@ -47,7 +83,13 @@ export type IEventUsecase = {
   findOne: (id: string) => Promise<EventModel | null>;
   findByCareRelationId: (careRelationId: string) => Promise<EventModel[]>;
   updateImageUrl(params: {
+    patientId: string;
     imageUrl: string;
+    eventId: string;
+  }): Promise<EventModel | null>;
+  updateDoneTime(params: {
+    careGiverId: string;
+    doneTime: Date;
     eventId: string;
   }): Promise<EventModel | null>;
 };

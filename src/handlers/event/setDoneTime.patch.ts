@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { eventUsecase, careRelationUsecase } from "../../usecases";
-import { ReqSetImageUrlSchema, RespCreateEvent } from "../../contracts";
+import { ReqSetDoneTimeUrlSchema, RespSetDoneTime } from "../../contracts";
 import { IUserMiddleware } from "../../middlewares";
 import { Role } from "@prisma/client";
 
-export const setImageUrl = async (req: Request, res: Response) => {
+export const setDoneTime = async (req: Request, res: Response) => {
   const user: IUserMiddleware | undefined = req.body.user;
-  if (!user || user.role !== Role.PATIENT) {
-    const response: RespCreateEvent = {
+  if (!user || user.role !== Role.CARE_GIVER) {
+    const response: RespSetDoneTime = {
       success: false,
       message: "Please authenticate as patient",
       error: "Please authenticate as patient",
@@ -18,9 +18,9 @@ export const setImageUrl = async (req: Request, res: Response) => {
 
   const eventId = req.params.id;
 
-  const parsed = ReqSetImageUrlSchema.safeParse(req.body);
+  const parsed = ReqSetDoneTimeUrlSchema.safeParse(req.body);
   if (!parsed.success) {
-    const response: RespCreateEvent = {
+    const response: RespSetDoneTime = {
       success: false,
       message: "Invalid request body",
       error: parsed.error.message,
@@ -29,25 +29,25 @@ export const setImageUrl = async (req: Request, res: Response) => {
     return;
   }
 
-  const updated = await eventUsecase.updateImageUrl({
-    patientId: user.id,
+  const updated = await eventUsecase.updateDoneTime({
+    careGiverId: user.id,
     eventId,
-    imageUrl: parsed.data.imageUrl,
+    doneTime: new Date(parsed.data.imageUrl),
   });
   if (!updated) {
-    const response: RespCreateEvent = {
+    const response: RespSetDoneTime = {
       success: false,
-      message: "Failed to update image url",
-      error: "Failed to update image url",
+      message: "Failed to update done time",
+      error: "Failed to update done time",
     };
     res.status(404).json(response);
     return;
   }
 
-  const response: RespCreateEvent = {
+  const response: RespSetDoneTime = {
     success: true,
     data: updated,
-    message: "Image url updated successfully",
+    message: "Done time updated successfully",
   };
   res.json(response);
 };
