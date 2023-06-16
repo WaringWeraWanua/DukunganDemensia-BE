@@ -2,6 +2,25 @@ import { Request, Response } from "express";
 import { IUserMiddleware } from "../../middlewares";
 import { locationUsecase, careRelationUsecase } from "../../usecases";
 import { GetLocationPatient } from "../../contracts/location";
+import { Role } from "@prisma/client"
+
+const findPatientId = async (role: Role, user: IUserMiddleware) => {
+  switch (role) {
+    case Role.CARE_GIVER: {
+      const patient = await careRelationUsecase.findByCareGiverId(user.id);
+      if (!patient) {
+        return null;
+      }
+      return patient.patientId;
+    }
+    case Role.PATIENT: {
+      return user.id;
+    }
+    default: {
+      return null;
+    }
+  }
+}
 
 export const getLocPatient = async (req: Request, res: Response) => {
   const user: IUserMiddleware | undefined = req.body.user;
@@ -10,27 +29,24 @@ export const getLocPatient = async (req: Request, res: Response) => {
     return;
   }
 
-  const patients = await careRelationUsecase.findByCareGiverId(user.id);
-
-  if (patients.length === 0) {
+  const patientId = await findPatientId(user.role, user);
+  if (!patientId) {
     res.status(404).send("No patient found");
     return;
   }
 
-  const locations = await Promise.all(
-    patients.map(async (patient) => {
-      const location = await locationUsecase.findPatientLocation(patient.id);
-
-      return {
-        patientId: patient.patientId,
-        location,
-      };
-    })
-  );
+  const location = await locationUsecase.findPatientLocation(patientId);
+  if (!location) {
+    res.status(404).send("No location found");
+    return;
+  }
 
   const response: GetLocationPatient = {
     success: true,
-    data: locations,
+    data: {
+      patientId: location.patientId,
+      location: location,
+    },
     message: "Get location patient successfully",
   }
   res.json(response);

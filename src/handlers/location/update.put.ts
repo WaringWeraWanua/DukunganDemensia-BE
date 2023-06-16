@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { locationUsecase } from "../../usecases";
 import { ReqUpdateLocationSchema } from "../../contracts/location";
-import { UserModel } from "../../models";
+import { IUserMiddleware } from "../../middlewares";
 
 export const updateLocation = async (req: Request, res: Response) => {
-  const user: UserModel | null = req.body.user;
+  const user: IUserMiddleware | null = req.body.user;
   if (!user) {
     res.status(401).send("Please authenticate");
     return;

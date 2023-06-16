@@ -28,8 +28,8 @@ model User {
   phoneNumber String
   role        Role   @default(CARE_GIVER)
 
-  CareRelation CareRelation[] @relation(name: "careGiver")
-  PatientRelation CareRelation[] @relation(name: "patient")
+  CareRelation CareRelation? @relation(name: "careGiver")
+  PatientRelation CareRelation? @relation(name: "patient")
 
   location Location?
 }
@@ -52,10 +52,10 @@ model CareRelation {
   updatedAt DateTime @updatedAt
 
   careGiver   User   @relation(name: "careGiver", fields: [careGiverId], references: [id])
-  careGiverId String
+  careGiverId String @unique
 
   patient   User   @relation(name: "patient", fields: [patientId], references: [id])
-  patientId String
+  patientId String @unique
 
   events Event[]
 }

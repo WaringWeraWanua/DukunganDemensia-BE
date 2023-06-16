@@ -32,7 +32,7 @@ export class CareRelationRepo {
   }
 
   async findByCareGiverId(careGiverId: string) {
-    return await this.prisma.careRelation.findMany({
+    return await this.prisma.careRelation.findFirst({
       where: {
         careGiverId,
       },
@@ -69,7 +69,7 @@ export class CareRelationRepo {
 
 export type ICareRelationRepo = Repo<CareRelationModel> & {
   findByPatientId(patientId: string): Promise<CareRelationModel | null>;
-  findByCareGiverId(careGiverId: string): Promise<CareRelationModel[]>;
+  findByCareGiverId(careGiverId: string): Promise<CareRelationModel | null>;
 };
 
 export const careRelationRepo: ICareRelationRepo = new CareRelationRepo();

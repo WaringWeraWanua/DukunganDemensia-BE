@@ -40,7 +40,7 @@ export type ICareRelationUsecase = {
   findMany: () => Promise<CareRelationModel[]>;
   findOne: (id: string) => Promise<CareRelationModel | null>;
   findByPatientId: (patientId: string) => Promise<CareRelationModel | null>;
-  findByCareGiverId: (careGiverId: string) => Promise<CareRelationModel[]>;
+  findByCareGiverId: (careGiverId: string) => Promise<CareRelationModel | null>;
 };
 
 export const careRelationUsecase: ICareRelationUsecase =

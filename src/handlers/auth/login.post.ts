@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import { IUserUsecase, userUsecase } from "../../usecases";
-import { CONFIG } from "../../configs";
+import { userUsecase } from "../../usecases";
 import { RespLogin, ReqLoginSchema } from "../../contracts";
-import bcrypt from "bcrypt";
 
 export const login = async (req: Request, res: Response) => {
   try {

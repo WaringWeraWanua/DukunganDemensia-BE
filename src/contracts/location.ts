@@ -17,5 +17,5 @@ export type RespUpdateLocation = BaseResponse<RespUpdateLocationData>;
 export type GetLocationPatientData = {
   patientId: string;
   location: LocationModel | null;
-}[];
+};
 export type GetLocationPatient = BaseResponse<GetLocationPatientData>;

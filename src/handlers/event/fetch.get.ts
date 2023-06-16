@@ -1,8 +1,30 @@
 import { Request, Response } from "express";
 import { IUserMiddleware } from "../../middlewares";
-import { ReqFetchEventSchema, RespFetchEvent } from "../../contracts/event";
+import { RespFetchEvent } from "../../contracts/event";
 import { careRelationUsecase, eventUsecase } from "../../usecases";
 import { Role } from "@prisma/client";
+
+const findCareRelation = async (user: IUserMiddleware) => {
+  switch (user.role) {
+    case Role.CARE_GIVER: {
+      const careRelation = await careRelationUsecase.findByCareGiverId(user.id);
+      if (!careRelation) {
+        return null;
+      }
+      return careRelation;
+    }
+    case Role.PATIENT: {
+      const careRelation = await careRelationUsecase.findByPatientId(user.id);
+      if (!careRelation) {
+        return null;
+      }
+      return careRelation;
+    }
+    default: {
+      return null;
+    }
+  }
+};
 
 export const fetch = async (req: Request, res: Response) => {
   const user: IUserMiddleware | undefined = req.body.user;
@@ -11,79 +33,20 @@ export const fetch = async (req: Request, res: Response) => {
     return;
   }
 
-  let careRelationId;
-  let patientId;
-  let careGiverId;
-  switch (user.role) {
-    case Role.CARE_GIVER: {
-      careGiverId = user.id;
-
-      const parsed = ReqFetchEventSchema.safeParse(req.query);
-      if (!parsed.success) {
-        const response: RespFetchEvent = {
-          success: false,
-          message: "Invalid request body",
-          error: parsed.error.message,
-        };
-
-        res.status(400).json(response);
-        return;
-      }
-
-      if (!parsed.data.patientId) {
-        const careRelations = await careRelationUsecase.findByCareGiverId(
-          user.id
-        );
-
-        if (careRelations.length === 0) {
-          res.status(404).send("No patient found");
-          return;
-        }
-
-        // TODO: confirm --> only check for the first patient
-        careRelationId = careRelations[0].id;
-        patientId = careRelations[0].patientId;
-      } else {
-        const careRelation = await careRelationUsecase.findByPatientId(
-          parsed.data.patientId
-        );
-
-        if (!careRelation) {
-          res.status(404).send("No patient found");
-          return;
-        }
-
-        careRelationId = careRelation.id;
-        patientId = careRelation.patientId;
-      }
-    }
-    case Role.PATIENT: {
-      patientId = user.id;
-
-      const careRelation = await careRelationUsecase.findByPatientId(user.id);
-      if (!careRelation) {
-        res.status(404).send("No patient found");
-        return;
-      }
-
-      careRelationId = careRelation.id;
-      careGiverId = careRelation.careGiverId;
-    }
-  }
-
-  if (!careRelationId || !patientId || !careGiverId) {
+  const careRelation = await findCareRelation(user);
+  if (!careRelation) {
     res.status(404).send("No patient found");
     return;
   }
 
-  const events = await eventUsecase.findByCareRelationId(careRelationId);
+  const events = await eventUsecase.findByCareRelationId(careRelation.id);
 
   const response: RespFetchEvent = {
     success: true,
     data: {
       events,
-      patientId,
-      careGiverId,
+      careGiverId: careRelation.id,
+      patientId: careRelation.patientId,
     },
     message: "Get events successfully",
   };
