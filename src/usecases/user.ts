@@ -1,4 +1,4 @@
-import { UserModel, OptionalUserModel } from "../models";
+import { UserModel, OptionalUserModel, OptionalNonIdUserModel } from "../models";
 import {
   IUserRepo,
   userRepo,
@@ -19,7 +19,7 @@ export class UserUsecase {
     return await this.userRepo.create(data);
   }
 
-  async update(data: OptionalUserModel) {
+  async update(data: OptionalNonIdUserModel) {
     return await this.userRepo.update(data);
   }
 
@@ -123,7 +123,7 @@ export type IRegisterParams = {
 
 export type IUserUsecase = {
   create: (data: OptionalUserModel) => Promise<UserModel>;
-  update: (data: OptionalUserModel) => Promise<UserModel>;
+  update: (data: OptionalNonIdUserModel) => Promise<UserModel>;
   delete: (id: string) => Promise<UserModel>;
   findMany: () => Promise<UserModel[]>;
   findOne: (id: string) => Promise<UserModel | null>;

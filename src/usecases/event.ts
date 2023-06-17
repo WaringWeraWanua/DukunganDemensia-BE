@@ -1,4 +1,4 @@
-import { EventModel, OptionalEventModel } from "../models";
+import { EventModel, OptionalEventModel, OptionalNonIdEventModel } from "../models";
 import { IEventRepo, eventRepo } from "../repo";
 import { ICareRelationUsecase, careRelationUsecase } from "../usecases";
 
@@ -10,7 +10,7 @@ export class EventUsecase {
     return await this.eventRepo.create(data);
   }
 
-  async update(data: OptionalEventModel) {
+  async update(data: OptionalNonIdEventModel) {
     return await this.eventRepo.update(data);
   }
 
@@ -77,7 +77,7 @@ export class EventUsecase {
 
 export type IEventUsecase = {
   create: (data: OptionalEventModel) => Promise<EventModel>;
-  update: (data: OptionalEventModel) => Promise<EventModel>;
+  update: (data: OptionalNonIdEventModel) => Promise<EventModel>;
   delete: (id: string) => Promise<EventModel>;
   findMany: () => Promise<EventModel[]>;
   findOne: (id: string) => Promise<EventModel | null>;

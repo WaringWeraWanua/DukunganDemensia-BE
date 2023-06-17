@@ -64,7 +64,7 @@ const registerRoutes = (app: Express, handlers: IHandler[]) => {
 };
 
 const app: Express = express();
-const port = 3000;
+const port = 9999;
 
 const meta = {
   startTime: Date.now(),

@@ -1,5 +1,9 @@
 import { IUserMiddleware } from "../middlewares";
-import { CareRelationModel, OptionalCareRelationModel } from "../models";
+import {
+  CareRelationModel,
+  OptionalCareRelationModel,
+  OptionalNonIdCareRelationModel,
+} from "../models";
 import { ICareRelationRepo, careRelationRepo } from "../repo";
 
 export class CareRelationUsecase {
@@ -9,7 +13,7 @@ export class CareRelationUsecase {
     return await this.careRelationRepo.create(data);
   }
 
-  async update(data: OptionalCareRelationModel) {
+  async update(data: OptionalNonIdCareRelationModel) {
     return await this.careRelationRepo.update(data);
   }
 
@@ -50,7 +54,7 @@ export class CareRelationUsecase {
 
 export type ICareRelationUsecase = {
   create: (data: OptionalCareRelationModel) => Promise<CareRelationModel>;
-  update: (data: OptionalCareRelationModel) => Promise<CareRelationModel>;
+  update: (data: OptionalNonIdCareRelationModel) => Promise<CareRelationModel>;
   delete: (id: string) => Promise<CareRelationModel>;
   findMany: () => Promise<CareRelationModel[]>;
   findOne: (id: string) => Promise<CareRelationModel | null>;

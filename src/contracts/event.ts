@@ -37,3 +37,16 @@ export type ReqSetDoneTimeUrlType = z.infer<typeof ReqSetImageUrlSchema>;
 
 export type RespSetDoneTimeData = EventModel;
 export type RespSetDoneTime = BaseResponse<RespSetImageUrlData>;
+
+export const ReqUpdateEventSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  startTime: z.coerce.date(),
+  endTime: z.coerce.date(),
+  startNotifTime: z.coerce.date(),
+});
+export type ReqUpdateEventType = z.infer<typeof ReqUpdateEventSchema>;
+
+export type RespUpdateEventData = EventModel;
+export type RespUpdateEvent = BaseResponse<RespUpdateEventData>;
+

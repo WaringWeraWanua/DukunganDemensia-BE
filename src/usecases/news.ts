@@ -1,4 +1,8 @@
-import { NewsModel, OptionalNewsModel } from "../models";
+import {
+  NewsModel,
+  OptionalNewsModel,
+  OptionalNonIdNewsModel,
+} from "../models";
 import { INewsRepo, newsRepo } from "../repo";
 
 export class NewsUsecase {
@@ -8,7 +12,7 @@ export class NewsUsecase {
     return await this.newsRepo.create(data);
   }
 
-  async update(data: OptionalNewsModel) {
+  async update(data: OptionalNonIdNewsModel) {
     return await this.newsRepo.update(data);
   }
 
@@ -27,7 +31,7 @@ export class NewsUsecase {
 
 export type INewsUsecase = {
   create: (data: OptionalNewsModel) => Promise<NewsModel>;
-  update: (data: OptionalNewsModel) => Promise<NewsModel>;
+  update: (data: OptionalNonIdNewsModel) => Promise<NewsModel>;
   delete: (id: string) => Promise<NewsModel>;
   findMany: () => Promise<NewsModel[]>;
   findOne: (id: string) => Promise<NewsModel | null>;

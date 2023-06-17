@@ -1,4 +1,8 @@
-import { LocationModel, OptionalLocationModel } from "../models";
+import {
+  LocationModel,
+  OptionalLocationModel,
+  OptionalNonIdLocationModel,
+} from "../models";
 import { ILocationRepo, locationRepo } from "../repo";
 
 export class LocationUsecase {
@@ -8,7 +12,7 @@ export class LocationUsecase {
     return await this.locationRepo.create(data);
   }
 
-  async update(data: OptionalLocationModel) {
+  async update(data: OptionalNonIdLocationModel) {
     return await this.locationRepo.update(data);
   }
 
@@ -37,7 +41,7 @@ export class LocationUsecase {
 
 export type ILocationUsecase = {
   create: (data: OptionalLocationModel) => Promise<LocationModel>;
-  update: (data: OptionalLocationModel) => Promise<LocationModel>;
+  update: (data: OptionalNonIdLocationModel) => Promise<LocationModel>;
   delete: (id: string) => Promise<LocationModel>;
   findMany: () => Promise<LocationModel[]>;
   findOne: (id: string) => Promise<LocationModel | null>;

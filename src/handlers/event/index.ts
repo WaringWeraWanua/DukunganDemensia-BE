@@ -2,6 +2,7 @@ import { fetch } from "./fetch.get";
 import { create } from "./create.post";
 import { setImageUrl } from "./setImageUrl.patch";
 import { setDoneTime } from "./setDoneTime.patch";
+import { update } from "./update.put";
 import { IHandler } from "../types";
 import { REST_METHOD, BASE_PATH } from "../../constants";
 import { MAP_MIDDLEWARES } from "../../middlewares";
@@ -37,5 +38,14 @@ export const eventHandler: IHandler[] = [
       MAP_MIDDLEWARES.NEED_LOGIN,
       MAP_MIDDLEWARES.ROLE(Role.CARE_GIVER),
     ]
+  },
+  {
+    path: BASE_PATH.EVENT + "/:id",
+    method: REST_METHOD.PUT,
+    handler: update,
+    middlewares: [
+      MAP_MIDDLEWARES.NEED_LOGIN,
+      MAP_MIDDLEWARES.ROLE(Role.CARE_GIVER),
+    ],
   }
 ];
