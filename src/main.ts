@@ -68,14 +68,16 @@ const app: Express = express();
 const port = 9999;
 
 const meta = {
-  startTime: Date.now(),
+  startTime: new Date(),
 } as const;
 
 app.use(bodyParser.json());
 app.use(morgan("dev"));
 
 app.get("/health", (req: Request, res: Response) => {
-  res.send("This server has been started since " + meta.startTime);
+  res.send(
+    "This server has been started since " + meta.startTime.toLocaleString()
+  );
 });
 
 registerRoutes(app, authHandler);
@@ -87,5 +89,5 @@ registerRoutes(app, userHandler);
 app.use(errorMiddleware);
 
 app.listen(port, () => {
-  console.log(`[Server]: I am running at https://localhost:${port}`);
+  console.log(`[Server]: I am running at http://localhost:${port}`);
 });

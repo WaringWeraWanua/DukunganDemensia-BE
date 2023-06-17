@@ -25,7 +25,6 @@ const admin: IRegisterParams = {
   email: "admin@gmail.com",
   phoneNumber: "0123456789",
   role: Role.ADMIN,
-  careGiverId: null,
 };
 
 const careGiver: IRegisterParams = {
@@ -35,7 +34,6 @@ const careGiver: IRegisterParams = {
   email: "caregiver@gmail.com",
   phoneNumber: "0123456789",
   role: Role.CARE_GIVER,
-  careGiverId: null,
 };
 
 const patient: {
@@ -49,7 +47,7 @@ const patient: {
     email: "patient@gmail.com",
     phoneNumber: "0123456789",
     role: Role.PATIENT,
-    careGiverId: null,
+    careGiverUsername: careGiver.username,
   },
   location: {
     latitude: faker.location.latitude(),
@@ -96,11 +94,11 @@ const events: OptionalEventModel[] = Array(10)
 
 const clearDB = async () => {
   const ops = [
+    await prisma.location.deleteMany(),
+    await prisma.event.deleteMany(),
+    await prisma.careRelation.deleteMany(),
     await prisma.user.deleteMany(),
     await prisma.news.deleteMany(),
-    await prisma.careRelation.deleteMany(),
-    await prisma.event.deleteMany(),
-    await prisma.location.deleteMany(),
   ];
 
   await Promise.all(ops);
@@ -108,10 +106,7 @@ const clearDB = async () => {
 
 const seedUser = async () => {
   const registeredAdmin = await userUsecase.register(admin);
-
   const registeredCareGiver = await userUsecase.register(careGiver);
-
-  patient.data.careGiverId = registeredCareGiver.id;
   const registeredPatient = await userUsecase.register(patient.data);
 
   patient.location.patientId = registeredPatient.id;
