@@ -6,6 +6,7 @@ import {
   newsHandler,
   locationHandler,
   eventHandler,
+  userHandler,
   IHandler,
 } from "./handlers";
 import { wrapper } from "./utils";
@@ -71,7 +72,7 @@ const meta = {
 } as const;
 
 app.use(bodyParser.json());
-app.use(morgan("dev"))
+app.use(morgan("dev"));
 
 app.get("/health", (req: Request, res: Response) => {
   res.send("This server has been started since " + meta.startTime);
@@ -81,6 +82,7 @@ registerRoutes(app, authHandler);
 registerRoutes(app, newsHandler);
 registerRoutes(app, locationHandler);
 registerRoutes(app, eventHandler);
+registerRoutes(app, userHandler);
 
 app.use(errorMiddleware);
 

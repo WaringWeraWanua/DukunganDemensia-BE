@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { locationUsecase } from "../../usecases";
-import { ReqUpdateLocationSchema, RespUpdateLocation } from "../../contracts/location";
+import { ReqUpdateLocationSchema, RespUpdateLocation } from "../../contracts";
 import { IUserMiddleware } from "../../middlewares";
 
 export const updateLocation = async (req: Request, res: Response) => {

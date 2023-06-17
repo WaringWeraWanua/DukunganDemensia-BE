@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { IUserMiddleware } from "../../middlewares";
 import { locationUsecase, careRelationUsecase } from "../../usecases";
-import { GetLocationPatient } from "../../contracts/location";
+import { GetLocationPatient } from "../../contracts";
 import { Role } from "@prisma/client";
 
 const findPatientId = async (role: Role, user: IUserMiddleware) => {

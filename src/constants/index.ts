@@ -14,6 +14,7 @@ export const BASE_PATH = {
   NEWS: "/news",
   LOCATION: "/location",
   EVENT: "/event",
+  USER: "/user",
 } as const;
 
 export type BASE_PATH_KEYS = keyof typeof BASE_PATH

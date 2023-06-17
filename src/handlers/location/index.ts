@@ -21,7 +21,7 @@ export const locationHandler: IHandler[] = [
     handler: getLocPatient,
     middlewares: [
       MAP_MIDDLEWARES.NEED_LOGIN,
-      MAP_MIDDLEWARES.ROLE(Role.CARE_GIVER, Role.PATIENT), // TODO: add role patient
+      MAP_MIDDLEWARES.ROLE(Role.CARE_GIVER, Role.PATIENT),
     ],
   },
 ];
