@@ -5,7 +5,7 @@ import {
   RespUpdateEventSchema,
   RespUpdateEventSchemaType,
 } from "../../contracts";
-import { OptionalEventModel, OptionalNonIdEventModel } from "../../models";
+import { OptionalNonIdEventModel } from "../../models";
 import { IUserMiddleware, MAP_MIDDLEWARES } from "../../middlewares";
 import { Role } from "@prisma/client";
 import { IHandler } from "../types";
@@ -84,6 +84,8 @@ export const updateHandler: IHandler = {
           schema: ReqUpdateEventSchema,
         },
       },
+      required: true,
+      description: "Update event request body",
     },
     params: zoa.object({
       id: zoa.string().uuid(),

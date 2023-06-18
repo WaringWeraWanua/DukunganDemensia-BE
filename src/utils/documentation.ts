@@ -49,4 +49,6 @@ export const generateDocs = (handlers: IHandler[][]) => {
   fs.writeFileSync(`${__dirname}/../../docs/openapi-docs.yml`, fileContent, {
     encoding: "utf-8",
   });
+
+  return docs;
 };

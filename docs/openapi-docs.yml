@@ -263,6 +263,75 @@ components:
       required:
         - latitude
         - longitude
+    EventDAO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: event's id
+          example: "1"
+        createdAt:
+          type: string
+          description: event's created at
+          example: 2021-08-01T00:00:00.000Z
+        updatedAt:
+          type: string
+          description: event's updated at
+          example: 2021-08-01T00:00:00.000Z
+        title:
+          type: string
+          description: event's title
+          example: Event Title
+        description:
+          type: string
+          description: event's description
+          example: Event Description
+        startTime:
+          type: string
+          description: event's start time
+          example: 2021-08-01T00:00:00.000Z
+        endTime:
+          type: string
+          description: event's end time
+          example: 2021-08-01T00:00:00.000Z
+        startNotifTime:
+          type: string
+          description: event's start notif time
+          example: 2021-08-01T00:00:00.000Z
+        proofImageUrl:
+          anyOf:
+            - type: string
+              description: event's image url
+              example: https://www.google.com
+            - nullable: true
+            - nullable: true
+        doneTime:
+          anyOf:
+            - type: string
+              description: event's done time
+              example: 2021-08-01T00:00:00.000Z
+            - nullable: true
+            - nullable: true
+        careRelationId:
+          type: string
+          description: event's care relation id
+          example: "1"
+      required:
+        - id
+        - createdAt
+        - updatedAt
+        - title
+        - description
+        - startTime
+        - endTime
+        - startNotifTime
+        - proofImageUrl
+        - doneTime
+        - careRelationId
+    events:
+      type: array
+      items:
+        $ref: "#/components/schemas/EventDAO"
   parameters: {}
 paths:
   /auth/login:
@@ -338,6 +407,8 @@ paths:
   /news:
     post:
       requestBody:
+        required: true
+        description: Create news request body
         content:
           application/json:
             schema:
@@ -614,6 +685,531 @@ paths:
                     type: string
                   data:
                     $ref: "#/components/schemas/LocationDAO"
+                required:
+                  - success
+                  - message
+  /event:
+    get:
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      patientId:
+                        type: string
+                        description: patient's id
+                        example: "1"
+                      careGiverId:
+                        type: string
+                        description: care giver's id
+                        example: "1"
+                      events:
+                        $ref: "#/components/schemas/events"
+                    required:
+                      - patientId
+                      - careGiverId
+                      - events
+                required:
+                  - success
+                  - message
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      patientId:
+                        type: string
+                        description: patient's id
+                        example: "1"
+                      careGiverId:
+                        type: string
+                        description: care giver's id
+                        example: "1"
+                      events:
+                        $ref: "#/components/schemas/events"
+                    required:
+                      - patientId
+                      - careGiverId
+                      - events
+                required:
+                  - success
+                  - message
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      patientId:
+                        type: string
+                        description: patient's id
+                        example: "1"
+                      careGiverId:
+                        type: string
+                        description: care giver's id
+                        example: "1"
+                      events:
+                        $ref: "#/components/schemas/events"
+                    required:
+                      - patientId
+                      - careGiverId
+                      - events
+                required:
+                  - success
+                  - message
+    post:
+      requestBody:
+        description: Create event
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: event's title
+                  example: Event Title
+                description:
+                  type: string
+                  description: event's description
+                  example: Event Description
+                startTime:
+                  type: string
+                  nullable: true
+                  description: event's start time
+                  example: 2021-08-01T00:00:00.000Z
+                endTime:
+                  type: string
+                  nullable: true
+                  description: event's end time
+                  example: 2021-08-01T00:00:00.000Z
+                startNotifTime:
+                  type: string
+                  nullable: true
+                  description: event's start notif time
+                  example: 2021-08-01T00:00:00.000Z
+              required:
+                - title
+                - description
+                - startTime
+                - endTime
+                - startNotifTime
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/EventDAO"
+                required:
+                  - success
+                  - message
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/EventDAO"
+                required:
+                  - success
+                  - message
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/EventDAO"
+                required:
+                  - success
+                  - message
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/EventDAO"
+                required:
+                  - success
+                  - message
+  /event/:id/proofImageUrl:
+    patch:
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: true
+          name: id
+          in: path
+      requestBody:
+        required: true
+        description: Request body for set image url
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                imageUrl:
+                  type: string
+                  description: event's image url
+                  example: https://www.google.com
+              required:
+                - imageUrl
+      responses:
+        "200":
+          description: Image url updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/EventDAO"
+                required:
+                  - success
+                  - message
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/EventDAO"
+                required:
+                  - success
+                  - message
+        "401":
+          description: Please authenticate as patient
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/EventDAO"
+                required:
+                  - success
+                  - message
+        "404":
+          description: Failed to update image url
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/EventDAO"
+                required:
+                  - success
+                  - message
+  /event/:id/doneTime:
+    patch:
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: true
+          name: id
+          in: path
+      requestBody:
+        required: true
+        description: Request body for updating done time
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                doneTime:
+                  type: string
+                  nullable: true
+                  description: event's done time
+                  example: 2021-08-01T00:00:00.000Z
+              required:
+                - doneTime
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/EventDAO"
+                required:
+                  - success
+                  - message
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/EventDAO"
+                required:
+                  - success
+                  - message
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/EventDAO"
+                required:
+                  - success
+                  - message
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/EventDAO"
+                required:
+                  - success
+                  - message
+  /event/:id:
+    put:
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: true
+          name: id
+          in: path
+      requestBody:
+        required: true
+        description: Update event request body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: event's title
+                  example: Event Title
+                description:
+                  type: string
+                  description: event's description
+                  example: Event Description
+                startTime:
+                  type: string
+                  nullable: true
+                  description: event's start time
+                  example: 2021-08-01T00:00:00.000Z
+                endTime:
+                  type: string
+                  nullable: true
+                  description: event's end time
+                  example: 2021-08-01T00:00:00.000Z
+                startNotifTime:
+                  type: string
+                  nullable: true
+                  description: event's start notif time
+                  example: 2021-08-01T00:00:00.000Z
+              required:
+                - title
+                - description
+                - startTime
+                - endTime
+                - startNotifTime
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/EventDAO"
+                required:
+                  - success
+                  - message
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/EventDAO"
+                required:
+                  - success
+                  - message
+        "401":
+          description: Please authenticate
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/EventDAO"
+                required:
+                  - success
+                  - message
+        "404":
+          description: No patient found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  error:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/EventDAO"
                 required:
                   - success
                   - message

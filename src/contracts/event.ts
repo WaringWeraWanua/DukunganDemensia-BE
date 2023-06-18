@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { zoa } from "../utils";
-import { EventModel } from "../models";
 import { BaseResponseSchema } from "./base";
 
 export const EventDAO = zoa
@@ -62,7 +61,7 @@ export const RespFetchEventSchemaData = zoa.object({
     description: "care giver's id",
     example: "1",
   }),
-  events: zoa.array(EventDAO).openapi("events"),
+  events: zoa.array(EventDAO).openapi("Events"),
 });
 export type RespFetchEventSchemaDataType = z.infer<
   typeof RespFetchEventSchemaData

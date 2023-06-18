@@ -9,6 +9,7 @@ import { IUserMiddleware, MAP_MIDDLEWARES } from "../../middlewares";
 import { Role } from "@prisma/client";
 import { IHandler } from "../types";
 import { BASE_PATH, REST_METHOD } from "../../constants";
+import { zoa } from "../../utils";
 
 export const setDoneTime = async (req: Request, res: Response) => {
   const user: IUserMiddleware | undefined = req.body.user;
@@ -73,7 +74,12 @@ export const setDoneTimeHandler: IHandler = {
           schema: ReqSetDoneTimeSchema,
         },
       },
+      required: true,
+      description: "Request body for updating done time",
     },
+    params: zoa.object({
+      id: zoa.string().uuid(),
+    }),
   },
   responses: {
     200: {

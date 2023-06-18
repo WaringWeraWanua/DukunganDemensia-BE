@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import {
   authHandler,
   locationHandler,
-  // eventHandler,
+  eventHandler,
   userHandler,
   IHandler,
   newsHandler,
@@ -14,6 +14,12 @@ import { REST_METHOD } from "./constants";
 
 import { MAP_MIDDLEWARES, errorMiddleware } from "./middlewares";
 import morgan from "morgan";
+import swaggerUi from "swagger-ui-express";
+// const swaggerDocument = require("./swagger.json");
+
+const options = {
+  explorer: true,
+};
 
 const registerRoutes = (app: Express, handlers: IHandler[]) => {
   handlers.forEach((handler) => {
@@ -84,7 +90,7 @@ const handlers: IHandler[][] = [
   authHandler,
   newsHandler,
   locationHandler,
-  // eventHandler,
+  eventHandler,
   userHandler,
 ];
 
@@ -95,6 +101,8 @@ handlers.forEach((handler) => {
 app.use(errorMiddleware);
 
 const docs = generateDocs(handlers);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(docs, options));
 
 app.listen(port, () => {
   console.log(`[Server]: I am running at http://localhost:${port}`);

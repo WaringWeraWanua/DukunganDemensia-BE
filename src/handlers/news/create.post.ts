@@ -56,6 +56,8 @@ export const createNewsHandler: IHandler = {
           schema: ReqCreateNewsSchema,
         },
       },
+      required: true,
+      description: "Create news request body",
     },
   },
   responses: {

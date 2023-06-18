@@ -71,6 +71,8 @@ export const setImageUrlHandler: IHandler = {
           schema: ReqSetImageUrlSchema,
         },
       },
+      required: true,
+      description: "Request body for set image url",
     },
     params: zoa.object({
       id: zoa.string().uuid(),
