@@ -1,12 +1,14 @@
 import { userUsecase } from "../../usecases";
 import { Request, Response } from "express";
-import { RespGetProfile } from "../../contracts";
-import { IUserMiddleware } from "../../middlewares";
+import { RespGetProfileSchemaType, RespGetProfileSchema } from "../../contracts";
+import { IUserMiddleware, MAP_MIDDLEWARES } from "../../middlewares";
+import { IHandler } from "../types";
+import { BASE_PATH, REST_METHOD } from "../../constants";
 
 export const profile = async (req: Request, res: Response) => {
   const user: IUserMiddleware | undefined = req.body.user;
   if (!user) {
-    const response: RespGetProfile = {
+    const response: RespGetProfileSchemaType = {
       success: false,
       message: "Please authenticate",
       error: "Please authenticate",
@@ -17,7 +19,7 @@ export const profile = async (req: Request, res: Response) => {
 
   const profile = await userUsecase.findOne(user.id);
   if (!profile) {
-    const response: RespGetProfile = {
+    const response: RespGetProfileSchemaType = {
       success: false,
       message: "No profile found",
       error: "No profile found",
@@ -26,10 +28,44 @@ export const profile = async (req: Request, res: Response) => {
     return;
   }
 
-  const response: RespGetProfile = {
+  const response: RespGetProfileSchemaType = {
     success: true,
     data: profile,
     message: "News found successfully",
   };
   res.json(response);
+};
+
+export const profileHandler: IHandler = {
+  handler: profile,
+  path: BASE_PATH.USER + "/self",
+  method: REST_METHOD.GET,
+  middlewares: [MAP_MIDDLEWARES.NEED_LOGIN],
+  request: {},
+  responses: {
+    200: {
+      description: "Success",
+      content: {
+        "application/json": {
+          schema: RespGetProfileSchema,
+        },
+      },
+    },
+    401: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: RespGetProfileSchema,
+        },
+      },
+    },
+    404: {
+      description: "Not found",
+      content: {
+        "application/json": {
+          schema: RespGetProfileSchema,
+        },
+      },
+    },
+  },
 };

@@ -1,34 +1,39 @@
 import { Request, Response } from "express";
-import { IUserMiddleware } from "../../middlewares";
-import { RespFetchEvent } from "../../contracts/event";
+import { IUserMiddleware, MAP_MIDDLEWARES } from "../../middlewares";
+import {
+  RespFetchEventSchema,
+  RespFetchEventSchemaType,
+} from "../../contracts/event";
 import { careRelationUsecase, eventUsecase } from "../../usecases";
+import { BASE_PATH, REST_METHOD } from "../../constants";
+import { IHandler } from "../types";
 
 export const fetch = async (req: Request, res: Response) => {
   const user: IUserMiddleware | undefined = req.body.user;
   if (!user) {
-    const response: RespFetchEvent = {
+    const response: RespFetchEventSchemaType = {
       success: false,
       message: "Please authenticate",
       error: "Please authenticate",
-    }
+    };
     res.status(401).json(response);
     return;
   }
 
   const careRelation = await careRelationUsecase.findByUserMiddleware(user);
   if (!careRelation) {
-    const response: RespFetchEvent = {
+    const response: RespFetchEventSchemaType = {
       success: false,
       message: "No patient found",
       error: "No patient found",
-    }
+    };
     res.status(404).json(response);
     return;
   }
 
   const events = await eventUsecase.findByCareRelationId(careRelation.id);
 
-  const response: RespFetchEvent = {
+  const response: RespFetchEventSchemaType = {
     success: true,
     data: {
       events,
@@ -38,4 +43,38 @@ export const fetch = async (req: Request, res: Response) => {
     message: "Get events successfully",
   };
   res.json(response);
+};
+
+export const fetchEventHandler: IHandler = {
+  path: BASE_PATH.EVENT,
+  method: REST_METHOD.GET,
+  handler: fetch,
+  middlewares: [MAP_MIDDLEWARES.NEED_LOGIN],
+  request: {},
+  responses: {
+    200: {
+      description: "Success",
+      content: {
+        "application/json": {
+          schema: RespFetchEventSchema,
+        },
+      },
+    },
+    401: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: RespFetchEventSchema,
+        },
+      },
+    },
+    404: {
+      description: "Not found",
+      content: {
+        "application/json": {
+          schema: RespFetchEventSchema,
+        },
+      },
+    },
+  },
 };

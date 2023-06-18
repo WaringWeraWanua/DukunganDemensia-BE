@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { BaseResponse } from "../contracts";
+import { BaseResponseSchemaType } from "../contracts";
 
 export const errorMiddleware = (
   err: Error,
@@ -9,9 +9,8 @@ export const errorMiddleware = (
 ) => {
   console.error(err.stack);
 
-  const response: BaseResponse<null> = {
+  const response: BaseResponseSchemaType = {
     success: false,
-    data: null,
     error: err.message,
     message: "An error occurred",
   };

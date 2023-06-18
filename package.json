@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/WaringWeraWanua/DukunganDemensia-BE#readme",
   "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^5.1.0",
     "@prisma/client": "^4.15.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",

@@ -3,13 +3,13 @@ import bodyParser from "body-parser";
 
 import {
   authHandler,
-  newsHandler,
   locationHandler,
-  eventHandler,
+  // eventHandler,
   userHandler,
   IHandler,
+  newsHandler,
 } from "./handlers";
-import { wrapper } from "./utils";
+import { wrapper, generateDocs } from "./utils";
 import { REST_METHOD } from "./constants";
 
 import { MAP_MIDDLEWARES, errorMiddleware } from "./middlewares";
@@ -80,13 +80,21 @@ app.get("/health", (req: Request, res: Response) => {
   );
 });
 
-registerRoutes(app, authHandler);
-registerRoutes(app, newsHandler);
-registerRoutes(app, locationHandler);
-registerRoutes(app, eventHandler);
-registerRoutes(app, userHandler);
+const handlers: IHandler[][] = [
+  authHandler,
+  newsHandler,
+  locationHandler,
+  // eventHandler,
+  userHandler,
+];
+
+handlers.forEach((handler) => {
+  registerRoutes(app, handler);
+});
 
 app.use(errorMiddleware);
+
+const docs = generateDocs(handlers);
 
 app.listen(port, () => {
   console.log(`[Server]: I am running at http://localhost:${port}`);

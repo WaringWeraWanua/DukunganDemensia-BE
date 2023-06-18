@@ -1,3 +1,10 @@
+import { z } from "zod";
+import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
+
+extendZodWithOpenApi(z);
+
+export const zoa = z;
+
 export type Prettify<T> = {
   [K in keyof T]: T[K];
 } & {};
