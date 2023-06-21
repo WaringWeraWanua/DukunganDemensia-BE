@@ -9,4 +9,5 @@ RUN npm install
 COPY . .
 EXPOSE 9999
 
-CMD [ "./scripts/startup.sh" ]
+# CMD [ "./scripts/startup.sh" ]
+CMD ["/bin/sh", "-c", "echo FIRST COMMAND;echo SECOND COMMAND"]

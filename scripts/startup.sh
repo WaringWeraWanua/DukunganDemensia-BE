@@ -1,5 +1,6 @@
 #!/bin/sh
 
-npx prisma generate
-npx prisma migrate deploy
+# npm i -g prisma
+# npx prisma generate
+# npx prisma migrate deploy
 npm run runstart
