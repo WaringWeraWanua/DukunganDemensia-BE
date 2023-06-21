@@ -14,6 +14,6 @@ services:
     ports:
       - '9999:9999'
     environment:
-      DATABASE_URL: 'postgresql://postgres:postgres@db:5432/labpro?schema=public'
+      DATABASE_URL: 'postgresql://postgres:postgres@db:5432/dukungan-dementia?schema=public'
       SECRET_KEY: 'hakausil'
       SALT_ROUNDS: "16"

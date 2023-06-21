@@ -15,6 +15,7 @@ import { REST_METHOD } from "./constants";
 import { MAP_MIDDLEWARES, errorMiddleware } from "./middlewares";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
+import { eventRepo, locationRepo, newsRepo, userRepo } from "./repo";
 // const swaggerDocument = require("./swagger.json");
 
 const options = {
@@ -85,6 +86,21 @@ app.get("/health", (req: Request, res: Response) => {
     "This server has been started since " + meta.startTime.toLocaleString()
   );
 });
+
+app.get("/test", (req: Request, res: Response) => {
+  const users = userRepo.findMany();
+  const events = eventRepo.findMany();
+  const locations = locationRepo.findMany();
+  const news = newsRepo.findMany();
+
+  res.send({
+    users,
+    events,
+    locations,
+    news,
+  })
+
+})
 
 const handlers: IHandler[][] = [
   authHandler,

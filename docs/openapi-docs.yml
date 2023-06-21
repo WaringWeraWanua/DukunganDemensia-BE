@@ -294,10 +294,6 @@ components:
           type: string
           description: event's end time
           example: 2021-08-01T00:00:00.000Z
-        startNotifTime:
-          type: string
-          description: event's start notif time
-          example: 2021-08-01T00:00:00.000Z
         proofImageUrl:
           anyOf:
             - type: string
@@ -316,6 +312,10 @@ components:
           type: string
           description: event's care relation id
           example: "1"
+        ringtoneType:
+          type: string
+          description: event's ringtone type
+          example: ringtone
       required:
         - id
         - createdAt
@@ -324,10 +324,10 @@ components:
         - description
         - startTime
         - endTime
-        - startNotifTime
         - proofImageUrl
         - doneTime
         - careRelationId
+        - ringtoneType
     Events:
       type: array
       items:
@@ -817,17 +817,16 @@ paths:
                   nullable: true
                   description: event's end time
                   example: 2021-08-01T00:00:00.000Z
-                startNotifTime:
+                ringtoneType:
                   type: string
-                  nullable: true
-                  description: event's start notif time
-                  example: 2021-08-01T00:00:00.000Z
+                  description: event's ringtone type
+                  example: ringtone
               required:
                 - title
                 - description
                 - startTime
                 - endTime
-                - startNotifTime
+                - ringtoneType
       responses:
         "200":
           description: Success
@@ -1129,17 +1128,16 @@ paths:
                   nullable: true
                   description: event's end time
                   example: 2021-08-01T00:00:00.000Z
-                startNotifTime:
+                ringtoneType:
                   type: string
-                  nullable: true
-                  description: event's start notif time
-                  example: 2021-08-01T00:00:00.000Z
+                  description: event's ringtone type
+                  example: ringtone
               required:
                 - title
                 - description
                 - startTime
                 - endTime
-                - startNotifTime
+                - ringtoneType
       responses:
         "200":
           description: Success

@@ -10,4 +10,5 @@ COPY . .
 EXPOSE 9999
 
 # CMD [ "./scripts/startup.sh" ]
-CMD ["/bin/sh", "-c", "echo FIRST COMMAND;echo SECOND COMMAND"]
+# CMD ["/bin/sh", "-c", "./scripts/startup.sh"]
+CMD ["/bin/sh", "-c", "npx prisma generate;npx prisma migrate dev --name init --preview-feature;npm run runstart"]
