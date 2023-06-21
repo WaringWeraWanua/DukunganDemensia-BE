@@ -53,10 +53,10 @@ export const update = async (req: Request, res: Response) => {
     id: req.params.id,
     startTime: new Date(parsed.data.startTime),
     endTime: new Date(parsed.data.endTime),
-    startNotifTime: new Date(parsed.data.startNotifTime),
     proofImageUrl: null,
     doneTime: null,
     careRelationId: careRelation.id,
+    ringtoneType: parsed.data.ringtoneType,
   };
 
   const event = await eventUsecase.update(dated);

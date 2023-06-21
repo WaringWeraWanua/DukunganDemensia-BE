@@ -328,7 +328,7 @@ components:
         - proofImageUrl
         - doneTime
         - careRelationId
-    events:
+    Events:
       type: array
       items:
         $ref: "#/components/schemas/EventDAO"
@@ -716,7 +716,7 @@ paths:
                         description: care giver's id
                         example: "1"
                       events:
-                        $ref: "#/components/schemas/events"
+                        $ref: "#/components/schemas/Events"
                     required:
                       - patientId
                       - careGiverId
@@ -749,7 +749,7 @@ paths:
                         description: care giver's id
                         example: "1"
                       events:
-                        $ref: "#/components/schemas/events"
+                        $ref: "#/components/schemas/Events"
                     required:
                       - patientId
                       - careGiverId
@@ -782,7 +782,7 @@ paths:
                         description: care giver's id
                         example: "1"
                       events:
-                        $ref: "#/components/schemas/events"
+                        $ref: "#/components/schemas/Events"
                     required:
                       - patientId
                       - careGiverId

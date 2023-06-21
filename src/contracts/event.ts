@@ -32,10 +32,6 @@ export const EventDAO = zoa
       description: "event's end time",
       example: "2021-08-01T00:00:00.000Z",
     }),
-    startNotifTime: zoa.date().openapi({
-      description: "event's start notif time",
-      example: "2021-08-01T00:00:00.000Z",
-    }),
     proofImageUrl: zoa.string().openapi({
       description: "event's image url",
       example: "https://www.google.com",
@@ -47,6 +43,10 @@ export const EventDAO = zoa
     careRelationId: zoa.string().openapi({
       description: "event's care relation id",
       example: "1",
+    }),
+    ringtoneType: zoa.string().openapi({
+      description: "event's ringtone type",
+      example: "ringtone",
     }),
   })
   .openapi("EventDAO");
@@ -93,9 +93,9 @@ export const ReqCreateEventSchema = zoa.object({
     description: "event's end time",
     example: "2021-08-01T00:00:00.000Z",
   }),
-  startNotifTime: zoa.coerce.date().openapi({
-    description: "event's start notif time",
-    example: "2021-08-01T00:00:00.000Z",
+  ringtoneType: zoa.string().openapi({
+    description: "event's ringtone type",
+    example: "ringtone",
   }),
 });
 export type ReqCreateEventSchemaType = z.infer<typeof ReqCreateEventSchema>;
@@ -171,9 +171,9 @@ export const ReqUpdateEventSchema = zoa.object({
     description: "event's end time",
     example: "2021-08-01T00:00:00.000Z",
   }),
-  startNotifTime: zoa.coerce.date().openapi({
-    description: "event's start notif time",
-    example: "2021-08-01T00:00:00.000Z",
+  ringtoneType: zoa.string().openapi({
+    description: "event's ringtone type",
+    example: "ringtone",
   }),
 });
 export type ReqUpdateEventSchemaType = z.infer<typeof ReqUpdateEventSchema>;

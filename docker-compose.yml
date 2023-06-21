@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  db:
+    image: 'postgres'
+    ports:
+      - '2345:5432'
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'labpro'
+  server:
+    build: .
+    ports:
+      - '9999:9999'
+    environment:
+      DATABASE_URL: 'postgresql://postgres:postgres@db:5432/labpro?schema=public'
+      SECRET_KEY: 'hakausil'
+      SALT_ROUNDS: "16"

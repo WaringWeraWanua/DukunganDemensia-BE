@@ -49,10 +49,10 @@ export const create = async (req: Request, res: Response) => {
     ...parsed.data,
     startTime: new Date(parsed.data.startTime),
     endTime: new Date(parsed.data.endTime),
-    startNotifTime: new Date(parsed.data.startNotifTime),
     proofImageUrl: null,
     doneTime: null,
     careRelationId: careRelation.id,
+    ringtoneType: parsed.data.ringtoneType || "",
   };
 
   const event = await eventUsecase.create(dated);

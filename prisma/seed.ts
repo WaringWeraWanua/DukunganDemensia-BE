@@ -75,8 +75,6 @@ const events: OptionalEventModel[] = Array(10)
     const startTime = faker.date.future();
     const endTime = new Date(startTime.getTime() + 120 * 60_000);
 
-    const startNotifTime = new Date(startTime.getTime() + 30 * 60_000);
-
     return {
       title: faker.lorem.sentence(),
       description: faker.lorem.paragraphs({
@@ -85,10 +83,10 @@ const events: OptionalEventModel[] = Array(10)
       }),
       startTime,
       endTime,
-      startNotifTime,
       proofImageUrl: "",
       careRelationId: "",
       doneTime: null,
+      ringtoneType: faker.lorem.sentence(),
     };
   });
 

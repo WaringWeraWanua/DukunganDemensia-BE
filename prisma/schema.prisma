@@ -28,7 +28,7 @@ model User {
   phoneNumber String
   role        Role   @default(CARE_GIVER)
 
-  CareRelation CareRelation? @relation(name: "careGiver")
+  CareRelation    CareRelation? @relation(name: "careGiver")
   PatientRelation CareRelation? @relation(name: "patient")
 
   location Location?
@@ -79,7 +79,7 @@ model Event {
   description    String
   startTime      DateTime
   endTime        DateTime
-  startNotifTime DateTime
+  ringtoneType   String // TODO: handle field
 
   proofImageUrl String?
   doneTime      DateTime?
