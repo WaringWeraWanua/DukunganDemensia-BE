@@ -9,10 +9,10 @@ import {
   IHandler,
   newsHandler,
 } from "./handlers";
-import { wrapper, generateDocs } from "./utils";
+import { generateDocs } from "./utils";
 import { REST_METHOD } from "./constants";
 
-import { MAP_MIDDLEWARES, errorMiddleware } from "./middlewares";
+import { MAP_MIDDLEWARES } from "./middlewares";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import { eventRepo, locationRepo, newsRepo, userRepo } from "./repo";
@@ -30,7 +30,7 @@ const registerRoutes = (app: Express, handlers: IHandler[]) => {
           handler.path,
           ...MAP_MIDDLEWARES.DEFAULT_MIDDLEWARES,
           ...handler.middlewares,
-          wrapper(handler.handler)
+          handler.handler
         );
         break;
       case REST_METHOD.POST:
@@ -38,7 +38,7 @@ const registerRoutes = (app: Express, handlers: IHandler[]) => {
           handler.path,
           ...MAP_MIDDLEWARES.DEFAULT_MIDDLEWARES,
           ...handler.middlewares,
-          wrapper(handler.handler)
+          handler.handler
         );
         break;
       case REST_METHOD.PUT:
@@ -46,7 +46,7 @@ const registerRoutes = (app: Express, handlers: IHandler[]) => {
           handler.path,
           ...MAP_MIDDLEWARES.DEFAULT_MIDDLEWARES,
           ...handler.middlewares,
-          wrapper(handler.handler)
+          handler.handler
         );
         break;
       case REST_METHOD.DELETE:
@@ -54,7 +54,7 @@ const registerRoutes = (app: Express, handlers: IHandler[]) => {
           handler.path,
           ...MAP_MIDDLEWARES.DEFAULT_MIDDLEWARES,
           ...handler.middlewares,
-          wrapper(handler.handler)
+          handler.handler
         );
         break;
       case REST_METHOD.PATCH:
@@ -62,11 +62,11 @@ const registerRoutes = (app: Express, handlers: IHandler[]) => {
           handler.path,
           ...MAP_MIDDLEWARES.DEFAULT_MIDDLEWARES,
           ...handler.middlewares,
-          wrapper(handler.handler)
+          handler.handler
         );
         break;
       default:
-        throw new Error("Method not supported");
+        console.error("Method not supported");
     }
   });
 };
@@ -98,9 +98,8 @@ app.get("/test", (req: Request, res: Response) => {
     events,
     locations,
     news,
-  })
-
-})
+  });
+});
 
 const handlers: IHandler[][] = [
   authHandler,
@@ -114,11 +113,9 @@ handlers.forEach((handler) => {
   registerRoutes(app, handler);
 });
 
-app.use(errorMiddleware);
-
 const docs = generateDocs(handlers);
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(docs, options));
+app.use("/", swaggerUi.serve, swaggerUi.setup(docs, options));
 
 app.listen(port, () => {
   console.log(`[Server]: I am running at http://localhost:${port}`);

@@ -11,37 +11,47 @@ import { MAP_MIDDLEWARES } from "../../middlewares";
 import { Role } from "@prisma/client";
 
 export const create = async (req: Request, res: Response) => {
-  const parsed = ReqCreateNewsSchema.safeParse(req.body);
+  try {
+    const parsed = ReqCreateNewsSchema.safeParse(req.body);
 
-  if (!parsed.success) {
+    if (!parsed.success) {
+      const response: RespCreateNewsSchemaType = {
+        success: false,
+        message: "Invalid request body",
+        error: parsed.error.message,
+      };
+
+      res.status(400).json(response);
+      return;
+    }
+
+    const news = await newsUsecase.create(parsed.data);
+    if (!news) {
+      const response: RespCreateNewsSchemaType = {
+        success: false,
+        message: "News not created",
+      };
+
+      res.status(400).json(response);
+      return;
+    }
+
     const response: RespCreateNewsSchemaType = {
-      success: false,
-      message: "Invalid request body",
-      error: parsed.error.message,
+      success: true,
+      data: news,
+      message: "News created successfully",
     };
 
-    res.status(400).json(response);
-    return;
-  }
-
-  const news = await newsUsecase.create(parsed.data);
-  if (!news) {
-    const response: RespCreateNewsSchemaType = {
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    const response = {
       success: false,
-      message: "News not created",
+      message: (error as Error)?.message || "Unknown error",
+      error: JSON.stringify(error, Object.getOwnPropertyNames(error)),
     };
-
     res.status(400).json(response);
-    return;
   }
-
-  const response: RespCreateNewsSchemaType = {
-    success: true,
-    data: news,
-    message: "News created successfully",
-  };
-
-  res.json(response);
 };
 
 export const createNewsHandler: IHandler = {

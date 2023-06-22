@@ -47,7 +47,7 @@ export class UserUsecase {
     } = params;
 
     if (!careGiverUsername && role === Role.PATIENT) {
-      throw new Error("CareGiverId is required for patient");
+      throw new Error("CareGiver username is required for patient");
     }
 
     const { hashed } = await hash(password);

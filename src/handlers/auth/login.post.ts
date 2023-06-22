@@ -10,27 +10,37 @@ import { ENDPOINTS } from "../endpoints";
 import { REST_METHOD } from "../../constants";
 
 export const login = async (req: Request, res: Response) => {
-  const parsed = ReqLoginSchema.safeParse(req.body);
+  try {
+    const parsed = ReqLoginSchema.safeParse(req.body);
 
-  if (!parsed.success) {
+    if (!parsed.success) {
+      const response: RespLoginSchemaType = {
+        success: false,
+        message: "Invalid request body",
+        error: parsed.error.message,
+      };
+
+      res.status(400).json(response);
+      return;
+    }
+
+    const result = await userUsecase.login(parsed.data);
+
     const response: RespLoginSchemaType = {
-      success: false,
-      message: "Invalid request body",
-      error: parsed.error.message,
+      success: true,
+      data: result,
+      message: "Login successfully",
     };
-
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    const response = {
+      success: false,
+      message: (error as Error)?.message || "Unknown error",
+      error: JSON.stringify(error, Object.getOwnPropertyNames(error)),
+    };
     res.status(400).json(response);
-    return;
   }
-
-  const result = await userUsecase.login(parsed.data);
-
-  const response: RespLoginSchemaType = {
-    success: true,
-    data: result,
-    message: "Login successfully",
-  };
-  res.json(response);
 };
 
 export const loginHandler: IHandler = {

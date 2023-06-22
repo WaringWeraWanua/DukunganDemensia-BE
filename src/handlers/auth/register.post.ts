@@ -10,26 +10,36 @@ import { ENDPOINTS } from "../endpoints";
 import { REST_METHOD } from "../../constants";
 
 export const register = async (req: Request, res: Response) => {
-  const parsed = ReqRegisterSchema.safeParse(req.body);
+  try {
+    const parsed = ReqRegisterSchema.safeParse(req.body);
 
-  if (!parsed.success) {
+    if (!parsed.success) {
+      const response: RespRegisterSchemaType = {
+        success: false,
+        message: "Invalid request body",
+        error: parsed.error.message,
+      };
+
+      res.status(400).json(response);
+      return;
+    }
+
+    const user = await userUsecase.register(parsed.data);
     const response: RespRegisterSchemaType = {
-      success: false,
-      message: "Invalid request body",
-      error: parsed.error.message,
+      success: true,
+      data: user,
+      message: "User created successfully",
     };
-
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    const response = {
+      success: false,
+      message: (error as Error)?.message || "Unknown error",
+      error: JSON.stringify(error, Object.getOwnPropertyNames(error)),
+    };
     res.status(400).json(response);
-    return;
   }
-
-  const user = await userUsecase.register(parsed.data);
-  const response: RespRegisterSchemaType = {
-    success: true,
-    data: user,
-    message: "User created successfully",
-  };
-  res.json(response);
 };
 
 export const registerHandler: IHandler = {

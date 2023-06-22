@@ -11,39 +11,49 @@ import { BASE_PATH, REST_METHOD } from "../../constants";
 import { Role } from "@prisma/client";
 
 export const updateLocation = async (req: Request, res: Response) => {
-  const user: IUserMiddleware | null = req.body.user;
-  if (!user) {
-    const response: RespUpdateLocationSchemaType = {
-      success: false,
-      message: "Please authenticate",
-      error: "Please authenticate",
-    };
-    res.status(401).json(response);
-    return;
-  }
+  try {
+    const user: IUserMiddleware | null = req.body.user;
+    if (!user) {
+      const response: RespUpdateLocationSchemaType = {
+        success: false,
+        message: "Please authenticate",
+        error: "Please authenticate",
+      };
+      res.status(401).json(response);
+      return;
+    }
 
-  const parsed = ReqUpdateLocationSchema.safeParse(req.body);
-  if (!parsed.success) {
+    const parsed = ReqUpdateLocationSchema.safeParse(req.body);
+    if (!parsed.success) {
+      const response: RespUpdateLocationSchemaType = {
+        success: false,
+        message: "Invalid request body",
+        error: parsed.error.message,
+      };
+      res.status(400).json(response);
+      return;
+    }
+
+    const location = await locationUsecase.upsert({
+      ...parsed.data,
+      patientId: user.id,
+    });
     const response: RespUpdateLocationSchemaType = {
+      success: true,
+      data: location,
+      message: "Location updated successfully",
+    };
+
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    const response = {
       success: false,
-      message: "Invalid request body",
-      error: parsed.error.message,
+      message: (error as Error)?.message || "Unknown error",
+      error: JSON.stringify(error, Object.getOwnPropertyNames(error)),
     };
     res.status(400).json(response);
-    return;
   }
-
-  const location = await locationUsecase.upsert({
-    ...parsed.data,
-    patientId: user.id,
-  });
-  const response: RespUpdateLocationSchemaType = {
-    success: true,
-    data: location,
-    message: "Location updated successfully",
-  };
-
-  res.json(response);
 };
 
 export const updateLocationHandler: IHandler = {

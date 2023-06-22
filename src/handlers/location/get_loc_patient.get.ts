@@ -28,45 +28,55 @@ const findPatientId = async (role: Role, user: IUserMiddleware) => {
 };
 
 export const getLocPatient = async (req: Request, res: Response) => {
-  const user: IUserMiddleware | undefined = req.body.user;
-  if (!user) {
-    const response: RespGetLocationSchemaType = {
-      success: false,
-      message: "Please authenticate",
-      error: "Please authenticate",
-    };
-    res.status(401).json(response);
-    return;
-  }
+  try {
+    const user: IUserMiddleware | undefined = req.body.user;
+    if (!user) {
+      const response: RespGetLocationSchemaType = {
+        success: false,
+        message: "Please authenticate",
+        error: "Please authenticate",
+      };
+      res.status(401).json(response);
+      return;
+    }
 
-  const patientId = await findPatientId(user.role, user);
-  if (!patientId) {
-    const response: RespGetLocationSchemaType = {
-      success: false,
-      message: "No patient found",
-      error: "No patient found",
-    };
-    res.status(404).json(response);
-    return;
-  }
+    const patientId = await findPatientId(user.role, user);
+    if (!patientId) {
+      const response: RespGetLocationSchemaType = {
+        success: false,
+        message: "No patient found",
+        error: "No patient found",
+      };
+      res.status(404).json(response);
+      return;
+    }
 
-  const location = await locationUsecase.findPatientLocation(patientId);
-  if (!location) {
-    const response: RespGetLocationSchemaType = {
-      success: false,
-      message: "No location found",
-      error: "No location found",
-    };
-    res.status(404).json(response);
-    return;
-  }
+    const location = await locationUsecase.findPatientLocation(patientId);
+    if (!location) {
+      const response: RespGetLocationSchemaType = {
+        success: false,
+        message: "No location found",
+        error: "No location found",
+      };
+      res.status(404).json(response);
+      return;
+    }
 
-  const response: RespGetLocationSchemaType = {
-    success: true,
-    data: location,
-    message: "Get location patient successfully",
-  };
-  res.json(response);
+    const response: RespGetLocationSchemaType = {
+      success: true,
+      data: location,
+      message: "Get location patient successfully",
+    };
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    const response = {
+      success: false,
+      message: (error as Error)?.message || "Unknown error",
+      error: JSON.stringify(error, Object.getOwnPropertyNames(error)),
+    };
+    res.status(400).json(response);
+  }
 };
 
 export const getLocPatientHandler: IHandler = {

@@ -11,58 +11,68 @@ import { IHandler } from "../types";
 import { BASE_PATH, REST_METHOD } from "../../constants";
 
 export const create = async (req: Request, res: Response) => {
-  const user: IUserMiddleware | undefined = req.body.user;
-  if (!user) {
-    const response: RespCreateEventSchemaType = {
-      success: false,
-      message: "Please authenticate",
-      error: "Please authenticate",
-    };
-    res.status(401).json(response);
-    return;
-  }
+  try {
+    const user: IUserMiddleware | undefined = req.body.user;
+    if (!user) {
+      const response: RespCreateEventSchemaType = {
+        success: false,
+        message: "Please authenticate",
+        error: "Please authenticate",
+      };
+      res.status(401).json(response);
+      return;
+    }
 
-  const parsed = ReqCreateEventSchema.safeParse(req.body);
-  if (!parsed.success) {
-    const response: RespCreateEventSchemaType = {
-      success: false,
-      message: "Invalid request body",
-      error: parsed.error.message,
+    const parsed = ReqCreateEventSchema.safeParse(req.body);
+    if (!parsed.success) {
+      const response: RespCreateEventSchemaType = {
+        success: false,
+        message: "Invalid request body",
+        error: parsed.error.message,
+      };
+
+      res.status(400).json(response);
+      return;
+    }
+
+    const careRelation = await careRelationUsecase.findByUserMiddleware(user);
+    if (!careRelation) {
+      const response: RespCreateEventSchemaType = {
+        success: false,
+        message: "No patient found",
+        error: "No patient found",
+      };
+      res.status(404).json(response);
+      return;
+    }
+
+    const dated: OptionalEventModel = {
+      ...parsed.data,
+      startTime: new Date(parsed.data.startTime),
+      endTime: new Date(parsed.data.endTime),
+      proofImageUrl: null,
+      doneTime: null,
+      careRelationId: careRelation.id,
+      ringtoneType: parsed.data.ringtoneType || "",
     };
 
+    const event = await eventUsecase.create(dated);
+    const response: RespCreateEventSchemaType = {
+      success: true,
+      data: event,
+      message: "Event created successfully",
+    };
+
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    const response = {
+      success: false,
+      message: (error as Error)?.message || "Unknown error",
+      error: JSON.stringify(error, Object.getOwnPropertyNames(error)),
+    };
     res.status(400).json(response);
-    return;
   }
-
-  const careRelation = await careRelationUsecase.findByUserMiddleware(user);
-  if (!careRelation) {
-    const response: RespCreateEventSchemaType = {
-      success: false,
-      message: "No patient found",
-      error: "No patient found",
-    };
-    res.status(404).json(response);
-    return;
-  }
-
-  const dated: OptionalEventModel = {
-    ...parsed.data,
-    startTime: new Date(parsed.data.startTime),
-    endTime: new Date(parsed.data.endTime),
-    proofImageUrl: null,
-    doneTime: null,
-    careRelationId: careRelation.id,
-    ringtoneType: parsed.data.ringtoneType || "",
-  };
-
-  const event = await eventUsecase.create(dated);
-  const response: RespCreateEventSchemaType = {
-    success: true,
-    data: event,
-    message: "Event created successfully",
-  };
-
-  res.json(response);
 };
 
 export const createEventHandler: IHandler = {
