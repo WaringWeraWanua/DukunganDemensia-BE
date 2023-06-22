@@ -8,6 +8,10 @@ import { careRelationUsecase, eventUsecase } from "../../usecases";
 import { BASE_PATH, REST_METHOD } from "../../constants";
 import { IHandler } from "../types";
 
+const LIMIT_TIME = () => {
+  return new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+}
+
 export const fetch = async (req: Request, res: Response) => {
   const user: IUserMiddleware | undefined = req.body.user;
   if (!user) {
@@ -31,7 +35,10 @@ export const fetch = async (req: Request, res: Response) => {
     return;
   }
 
-  const events = await eventUsecase.findByCareRelationId(careRelation.id);
+  const events = await eventUsecase.findManyFilter({
+    careRelationId: careRelation.id,
+    limitStartTime: LIMIT_TIME(),
+  });
 
   const response: RespFetchEventSchemaType = {
     success: true,

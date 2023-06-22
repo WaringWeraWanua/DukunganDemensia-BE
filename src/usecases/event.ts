@@ -1,4 +1,8 @@
-import { EventModel, OptionalEventModel, OptionalNonIdEventModel } from "../models";
+import {
+  EventModel,
+  OptionalEventModel,
+  OptionalNonIdEventModel,
+} from "../models";
 import { IEventRepo, eventRepo } from "../repo";
 import { ICareRelationUsecase, careRelationUsecase } from "../usecases";
 
@@ -28,6 +32,13 @@ export class EventUsecase {
 
   async findByCareRelationId(careRelationId: string) {
     return await this.eventRepo.findManyFilter({ careRelationId });
+  }
+
+  async findManyFilter(params: {
+    careRelationId?: string;
+    limitStartTime?: Date;
+  }) {
+    return await this.eventRepo.findManyFilter(params);
   }
 
   async updateImageUrl(params: {
@@ -92,6 +103,10 @@ export type IEventUsecase = {
     doneTime: Date;
     eventId: string;
   }): Promise<EventModel | null>;
+  findManyFilter(params: {
+    careRelationId?: string;
+    limitStartTime?: Date;
+  }): Promise<EventModel[]>;
 };
 
 export const eventUsecase: IEventUsecase = new EventUsecase();
