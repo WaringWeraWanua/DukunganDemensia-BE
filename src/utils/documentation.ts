@@ -35,7 +35,7 @@ export const generateDocs = (handlers: IHandler[][]) => {
       title: "My API",
       description: "This is the API",
     },
-    servers: [{ url: "v1" }],
+    servers: [],
   });
 
   fs.writeFileSync(
