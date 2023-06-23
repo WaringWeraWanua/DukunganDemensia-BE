@@ -89,10 +89,6 @@ export const ReqCreateEventSchema = zoa.object({
     description: "event's start time",
     example: "2021-08-01T00:00:00.000Z",
   }),
-  endTime: zoa.coerce.date().openapi({
-    description: "event's end time",
-    example: "2021-08-01T00:00:00.000Z",
-  }),
   ringtoneType: zoa.string().openapi({
     description: "event's ringtone type",
     example: "ringtone",
@@ -133,14 +129,6 @@ export const RespSetImageUrlSchema = BaseResponseSchema.merge(
     .openapi("RespSetImageUrlSchema")
 );
 export type RespSetImageUrlSchemaType = z.infer<typeof RespSetImageUrlSchema>;
-
-export const ReqSetDoneTimeSchema = zoa.object({
-  doneTime: zoa.coerce.date().openapi({
-    description: "event's done time",
-    example: "2021-08-01T00:00:00.000Z",
-  }),
-});
-export type ReqSetDoneTimeSchemaType = z.infer<typeof ReqSetDoneTimeSchema>;
 
 export const RespSetDoneTimeData = EventDAO;
 export type RespSetDoneTimeDataType = z.infer<typeof RespSetDoneTimeData>;

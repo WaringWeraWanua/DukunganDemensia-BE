@@ -62,13 +62,12 @@ export class EventUsecase {
     return await this.update(event);
   }
 
-  async updateDoneTime(params: {
+  async setDone(params: {
     careGiverId: string;
-    doneTime: Date;
     eventId: string;
   }) {
     const event = await this.findOne(params.eventId);
-    if (!event) {
+    if (!event || event.doneTime) {
       return null;
     }
 
@@ -79,9 +78,7 @@ export class EventUsecase {
       return null;
     }
 
-    // TODO: validate whether the done time has been set before
-
-    event.doneTime = params.doneTime;
+    event.doneTime = new Date();
     return await this.update(event);
   }
 }
@@ -98,9 +95,8 @@ export type IEventUsecase = {
     imageUrl: string;
     eventId: string;
   }): Promise<EventModel | null>;
-  updateDoneTime(params: {
+  setDone(params: {
     careGiverId: string;
-    doneTime: Date;
     eventId: string;
   }): Promise<EventModel | null>;
   findManyFilter(params: {

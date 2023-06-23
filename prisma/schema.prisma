@@ -78,7 +78,6 @@ model Event {
   title          String
   description    String
   startTime      DateTime
-  endTime        DateTime
   ringtoneType   String // TODO: handle field
 
   proofImageUrl String?

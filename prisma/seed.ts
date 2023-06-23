@@ -73,7 +73,6 @@ const events: OptionalEventModel[] = Array(10)
   .fill({})
   .map((_) => {
     const startTime = faker.date.future();
-    const endTime = new Date(startTime.getTime() + 120 * 60_000);
 
     return {
       title: faker.lorem.sentence(),
@@ -82,7 +81,6 @@ const events: OptionalEventModel[] = Array(10)
         max: 3,
       }),
       startTime,
-      endTime,
       proofImageUrl: "",
       careRelationId: "",
       doneTime: null,

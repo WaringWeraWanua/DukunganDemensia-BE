@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { eventUsecase, careRelationUsecase } from "../../usecases";
 import {
-  ReqSetDoneTimeSchema,
   RespSetDoneTimeSchema,
   RespSetDoneTimeSchemaType,
 } from "../../contracts";
@@ -26,21 +25,9 @@ export const setDoneTime = async (req: Request, res: Response) => {
 
     const eventId = req.params.id;
 
-    const parsed = ReqSetDoneTimeSchema.safeParse(req.body);
-    if (!parsed.success) {
-      const response: RespSetDoneTimeSchemaType = {
-        success: false,
-        message: "Invalid request body",
-        error: parsed.error.message,
-      };
-      res.status(400).json(response);
-      return;
-    }
-
-    const updated = await eventUsecase.updateDoneTime({
+    const updated = await eventUsecase.setDone({
       careGiverId: user.id,
       eventId,
-      doneTime: new Date(parsed.data.doneTime),
     });
     if (!updated) {
       const response: RespSetDoneTimeSchemaType = {
@@ -70,23 +57,14 @@ export const setDoneTime = async (req: Request, res: Response) => {
 };
 
 export const setDoneTimeHandler: IHandler = {
-  path: BASE_PATH.EVENT + "/:id/doneTime",
-  method: REST_METHOD.PATCH,
+  path: BASE_PATH.EVENT + "/:id/done",
+  method: REST_METHOD.POST,
   handler: setDoneTime,
   middlewares: [
     MAP_MIDDLEWARES.NEED_LOGIN,
     MAP_MIDDLEWARES.ROLE(Role.CARE_GIVER),
   ],
   request: {
-    body: {
-      content: {
-        "application/json": {
-          schema: ReqSetDoneTimeSchema,
-        },
-      },
-      required: true,
-      description: "Request body for updating done time",
-    },
     params: zoa.object({
       id: zoa.string().uuid(),
     }),
