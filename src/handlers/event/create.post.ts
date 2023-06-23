@@ -49,7 +49,6 @@ export const create = async (req: Request, res: Response) => {
     const dated: OptionalEventModel = {
       ...parsed.data,
       startTime: new Date(parsed.data.startTime),
-      endTime: new Date(parsed.data.endTime),
       proofImageUrl: null,
       doneTime: null,
       careRelationId: careRelation.id,

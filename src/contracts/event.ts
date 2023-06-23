@@ -28,10 +28,6 @@ export const EventDAO = zoa
       description: "event's start time",
       example: "2021-08-01T00:00:00.000Z",
     }),
-    endTime: zoa.date().openapi({
-      description: "event's end time",
-      example: "2021-08-01T00:00:00.000Z",
-    }),
     proofImageUrl: zoa.string().openapi({
       description: "event's image url",
       example: "https://www.google.com",
@@ -153,10 +149,6 @@ export const ReqUpdateEventSchema = zoa.object({
   }),
   startTime: zoa.coerce.date().openapi({
     description: "event's start time",
-    example: "2021-08-01T00:00:00.000Z",
-  }),
-  endTime: zoa.coerce.date().openapi({
-    description: "event's end time",
     example: "2021-08-01T00:00:00.000Z",
   }),
   ringtoneType: zoa.string().openapi({

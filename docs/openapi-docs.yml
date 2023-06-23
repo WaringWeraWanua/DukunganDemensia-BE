@@ -289,10 +289,6 @@ components:
           type: string
           description: event's start time
           example: 2021-08-01T00:00:00.000Z
-        endTime:
-          type: string
-          description: event's end time
-          example: 2021-08-01T00:00:00.000Z
         proofImageUrl:
           anyOf:
             - type: string
@@ -322,7 +318,6 @@ components:
         - title
         - description
         - startTime
-        - endTime
         - proofImageUrl
         - doneTime
         - careRelationId
@@ -811,11 +806,6 @@ paths:
                   nullable: true
                   description: event's start time
                   example: 2021-08-01T00:00:00.000Z
-                endTime:
-                  type: string
-                  nullable: true
-                  description: event's end time
-                  example: 2021-08-01T00:00:00.000Z
                 ringtoneType:
                   type: string
                   description: event's ringtone type
@@ -824,7 +814,6 @@ paths:
                 - title
                 - description
                 - startTime
-                - endTime
                 - ringtoneType
       responses:
         "200":
@@ -995,8 +984,8 @@ paths:
                 required:
                   - success
                   - message
-  /event/:id/doneTime:
-    patch:
+  /event/:id/done:
+    post:
       parameters:
         - schema:
             type: string
@@ -1004,21 +993,6 @@ paths:
           required: true
           name: id
           in: path
-      requestBody:
-        required: true
-        description: Request body for updating done time
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                doneTime:
-                  type: string
-                  nullable: true
-                  description: event's done time
-                  example: 2021-08-01T00:00:00.000Z
-              required:
-                - doneTime
       responses:
         "200":
           description: Success
@@ -1122,11 +1096,6 @@ paths:
                   nullable: true
                   description: event's start time
                   example: 2021-08-01T00:00:00.000Z
-                endTime:
-                  type: string
-                  nullable: true
-                  description: event's end time
-                  example: 2021-08-01T00:00:00.000Z
                 ringtoneType:
                   type: string
                   description: event's ringtone type
@@ -1135,7 +1104,6 @@ paths:
                 - title
                 - description
                 - startTime
-                - endTime
                 - ringtoneType
       responses:
         "200":

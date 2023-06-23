@@ -53,7 +53,6 @@ export const update = async (req: Request, res: Response) => {
       ...parsed.data,
       id: req.params.id,
       startTime: new Date(parsed.data.startTime),
-      endTime: new Date(parsed.data.endTime),
       proofImageUrl: null,
       doneTime: null,
       careRelationId: careRelation.id,
