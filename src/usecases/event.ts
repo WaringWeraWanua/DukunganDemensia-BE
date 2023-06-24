@@ -3,12 +3,27 @@ import {
   OptionalEventModel,
   OptionalNonIdEventModel,
 } from "../models";
-import { IEventRepo, eventRepo } from "../repo";
-import { ICareRelationUsecase, careRelationUsecase } from "../usecases";
+import {
+  ICareRelationRepo,
+  IEventRepo,
+  eventRepo,
+  careRelationRepo,
+} from "../repo";
 
 export class EventUsecase {
-  private eventRepo: IEventRepo = eventRepo;
-  private careRelationUsecase: ICareRelationUsecase = careRelationUsecase;
+  private eventRepo: IEventRepo;
+  private careRelationRepo: ICareRelationRepo;
+
+  constructor({
+    eventRepo,
+    careRelationRepo,
+  }: {
+    eventRepo: IEventRepo;
+    careRelationRepo: ICareRelationRepo;
+  }) {
+    this.eventRepo = eventRepo;
+    this.careRelationRepo = careRelationRepo;
+  }
 
   async create(data: OptionalEventModel) {
     return await this.eventRepo.create(data);
@@ -51,7 +66,7 @@ export class EventUsecase {
       return null;
     }
 
-    const careRelation = await this.careRelationUsecase.findByPatientId(
+    const careRelation = await this.careRelationRepo.findByPatientId(
       params.patientId
     );
     if (!careRelation || careRelation.patientId !== params.patientId) {
@@ -62,16 +77,13 @@ export class EventUsecase {
     return await this.update(event);
   }
 
-  async setDone(params: {
-    careGiverId: string;
-    eventId: string;
-  }) {
+  async setDone(params: { careGiverId: string; eventId: string }) {
     const event = await this.findOne(params.eventId);
     if (!event || event.doneTime) {
       return null;
     }
 
-    const careRelation = await this.careRelationUsecase.findByCareGiverId(
+    const careRelation = await this.careRelationRepo.findByCareGiverId(
       params.careGiverId
     );
     if (!careRelation || careRelation.careGiverId !== params.careGiverId) {
@@ -105,4 +117,7 @@ export type IEventUsecase = {
   }): Promise<EventModel[]>;
 };
 
-export const eventUsecase: IEventUsecase = new EventUsecase();
+export const eventUsecase: IEventUsecase = new EventUsecase({
+  eventRepo,
+  careRelationRepo,
+});
