@@ -41,6 +41,11 @@ export const fetch = async (req: Request, res: Response) => {
       limitStartTime: LIMIT_TIME(),
     });
 
+    // sort by nearest start time
+    events.sort((a, b) => {
+      return a.startTime.getTime() - b.startTime.getTime();
+    });
+
     const response: RespFetchEventSchemaType = {
       success: true,
       data: {

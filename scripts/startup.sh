@@ -1,6 +1,5 @@
 #!/bin/sh
 
-# npm i -g prisma
 npx prisma generate
-npx prisma migrate deploy
-npm run runstart
+npx prisma migrate dev
+npx prisma db seed
