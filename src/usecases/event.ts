@@ -79,7 +79,7 @@ export class EventUsecase {
 
   async setDone(params: { careGiverId: string; eventId: string }) {
     const event = await this.findOne(params.eventId);
-    if (!event || event.doneTime) {
+    if (!event) {
       return null;
     }
 
