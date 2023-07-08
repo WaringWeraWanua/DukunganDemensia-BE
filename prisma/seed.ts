@@ -23,7 +23,7 @@ const admin: IRegisterParams = {
   password: "admin",
   name: "admin",
   email: "admin@gmail.com",
-  phoneNumber: "0123456789",
+  phoneNumber: "+6281329071082",
   role: Role.ADMIN,
 };
 
@@ -32,7 +32,7 @@ const careGiver: IRegisterParams = {
   password: "caregiver",
   name: "caregiver",
   email: "caregiver@gmail.com",
-  phoneNumber: "0123456789",
+  phoneNumber: "+6285326502041",
   role: Role.CARE_GIVER,
 };
 
@@ -45,7 +45,7 @@ const patient: {
     password: "patient",
     name: "patient",
     email: "patient@gmail.com",
-    phoneNumber: "0123456789",
+    phoneNumber: "+6281329711104",
     role: Role.PATIENT,
     careGiverUsername: careGiver.username,
   },
