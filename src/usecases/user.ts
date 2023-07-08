@@ -1,13 +1,15 @@
-import { UserModel, OptionalUserModel, OptionalNonIdUserModel } from "../models";
+import {
+  UserModel,
+  OptionalUserModel,
+  OptionalNonIdUserModel,
+} from "../models";
 import {
   IUserRepo,
   userRepo,
   ICareRelationRepo,
   careRelationRepo,
 } from "../repo";
-import {
-  careRelationUsecase,
-} from ".";
+import { careRelationUsecase } from ".";
 import { Role } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { CONFIG } from "../configs";
@@ -16,9 +18,23 @@ import { IUserMiddleware } from "../middlewares";
 import { ICareRelationUsecase } from "./care_relation";
 
 export class UserUsecase {
-  private userRepo: IUserRepo = userRepo;
-  private careRelationRepo: ICareRelationRepo = careRelationRepo;
-  private careRelationUsecase: ICareRelationUsecase = careRelationUsecase;
+  private userRepo: IUserRepo;
+  private careRelationRepo: ICareRelationRepo;
+  private careRelationUsecase: ICareRelationUsecase;
+
+  constructor({
+    userRepo,
+    careRelationRepo,
+    careRelationUsecase,
+  }: {
+    userRepo: IUserRepo;
+    careRelationRepo: ICareRelationRepo;
+    careRelationUsecase: ICareRelationUsecase;
+  }) {
+    this.userRepo = userRepo;
+    this.careRelationRepo = careRelationRepo;
+    this.careRelationUsecase = careRelationUsecase;
+  }
 
   async create(data: OptionalUserModel) {
     return await this.userRepo.create(data);
@@ -156,4 +172,8 @@ export type IUserUsecase = {
   findPair: (userMiddleare: IUserMiddleware) => Promise<UserModel | null>;
 };
 
-export const userUsecase: IUserUsecase = new UserUsecase();
+export const userUsecase: IUserUsecase = new UserUsecase({
+  userRepo,
+  careRelationRepo,
+  careRelationUsecase,
+});
