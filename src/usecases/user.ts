@@ -5,15 +5,20 @@ import {
   ICareRelationRepo,
   careRelationRepo,
 } from "../repo";
+import {
+  careRelationUsecase,
+} from ".";
 import { Role } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { CONFIG } from "../configs";
 import { hash, verifyHash } from "../utils";
 import { IUserMiddleware } from "../middlewares";
+import { ICareRelationUsecase } from "./care_relation";
 
 export class UserUsecase {
   private userRepo: IUserRepo = userRepo;
   private careRelationRepo: ICareRelationRepo = careRelationRepo;
+  private careRelationUsecase: ICareRelationUsecase = careRelationUsecase;
 
   async create(data: OptionalUserModel) {
     return await this.userRepo.create(data);
@@ -104,6 +109,25 @@ export class UserUsecase {
       token,
     };
   }
+
+  async findPair(userMiddleare: IUserMiddleware) {
+    const user = await this.careRelationUsecase.findByUserMiddleware(
+      userMiddleare
+    );
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    switch (userMiddleare.role) {
+      case Role.CARE_GIVER:
+        return this.findOne(user.patientId);
+      case Role.PATIENT:
+        return this.findOne(user.careGiverId);
+      default:
+        throw new Error("Role not found");
+    }
+  }
 }
 
 export type ILoginParams = {
@@ -129,6 +153,7 @@ export type IUserUsecase = {
   findOne: (id: string) => Promise<UserModel | null>;
   login: (params: ILoginParams) => Promise<{ user: UserModel; token: string }>;
   register: (params: IRegisterParams) => Promise<UserModel>;
+  findPair: (userMiddleare: IUserMiddleware) => Promise<UserModel | null>;
 };
 
 export const userUsecase: IUserUsecase = new UserUsecase();

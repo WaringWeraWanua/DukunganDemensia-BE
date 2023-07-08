@@ -52,5 +52,18 @@ export const RespGetProfileSchema = BaseResponseSchema.merge(
 ).openapi("RespGetProfile");
 export type RespGetProfileSchemaType = z.infer<typeof RespGetProfileSchema>;
 
+export const RespGetPairData = UserDAO.openapi("RespGetProfileData");
+export type RespGetPairDataType = z.infer<typeof RespGetProfileData>;
+
+export const RespGetPairSchema = BaseResponseSchema.merge(
+  zoa
+    .object({
+      data: RespGetProfileData.optional(),
+    })
+    .openapi("RespGetPair")
+).openapi("RespGetPair");
+export type RespGetPairSchemaType = z.infer<typeof RespGetProfileSchema>;
+
 registry.register("UserDAO", UserDAO);
 registry.register("RespGetProfile", RespGetProfileSchema);
+registry.register("RespGetPair", RespGetPairSchema);

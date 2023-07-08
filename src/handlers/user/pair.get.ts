@@ -8,7 +8,7 @@ import { IUserMiddleware, MAP_MIDDLEWARES } from "../../middlewares";
 import { IHandler } from "../types";
 import { BASE_PATH, REST_METHOD } from "../../constants";
 
-export const profile = async (req: Request, res: Response) => {
+export const userPair = async (req: Request, res: Response) => {
   try {
     const user: IUserMiddleware | undefined = req.body.user;
     if (!user) {
@@ -21,12 +21,12 @@ export const profile = async (req: Request, res: Response) => {
       return;
     }
 
-    const profile = await userUsecase.findOne(user.id);
-    if (!profile) {
+    const paired = await userUsecase.findPair(user);
+    if (!paired) {
       const response: RespGetProfileSchemaType = {
         success: false,
-        message: "No profile found",
-        error: "No profile found",
+        message: "No paired user found",
+        error: "No paired user found",
       };
       res.status(404).json(response);
       return;
@@ -34,8 +34,8 @@ export const profile = async (req: Request, res: Response) => {
 
     const response: RespGetProfileSchemaType = {
       success: true,
-      data: profile,
-      message: "User found successfully",
+      data: paired,
+      message: "Paired user found successfully",
     };
     res.json(response);
   } catch (error) {
@@ -49,9 +49,9 @@ export const profile = async (req: Request, res: Response) => {
   }
 };
 
-export const profileHandler: IHandler = {
-  handler: profile,
-  path: BASE_PATH.USER + "/self",
+export const pairHandler: IHandler = {
+  handler: userPair,
+  path: BASE_PATH.USER + "/pair",
   method: REST_METHOD.GET,
   middlewares: [MAP_MIDDLEWARES.NEED_LOGIN],
   request: {},

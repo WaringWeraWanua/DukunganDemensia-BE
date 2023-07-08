@@ -113,6 +113,20 @@ components:
       required:
         - success
         - message
+    RespGetPair:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        error:
+          type: string
+        data:
+          $ref: "#/components/schemas/RespGetProfileData"
+      required:
+        - success
+        - message
     RespRegister:
       type: object
       properties:
@@ -1179,6 +1193,27 @@ paths:
                   - success
                   - message
   /user/self:
+    get:
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RespGetProfile"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RespGetProfile"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RespGetProfile"
+  /user/pair:
     get:
       responses:
         "200":
