@@ -9,7 +9,7 @@ import {
   ICareRelationRepo,
   careRelationRepo,
 } from "../repo";
-import { careRelationUsecase } from ".";
+import { careRelationUsecase } from "./care_relation";
 import { Role } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { CONFIG } from "../configs";
