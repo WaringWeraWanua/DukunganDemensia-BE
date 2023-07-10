@@ -154,7 +154,9 @@ const seedEvent = async (props: { careRelationId: string }) => {
 
     e.title = title;
     e.description = description;
-    e.startTime.setHours(hour);
+    e.startTime = new Date(
+      e.startTime.setHours(hour, 0, 0, 0)
+    )
     e.ringtoneType = ringtoneType;
 
     if (idx + 1 >= DONE_THRESHOLD) {
@@ -164,7 +166,7 @@ const seedEvent = async (props: { careRelationId: string }) => {
     const doneTime = new Date(
       e.startTime.getTime() + Math.random() * 120 * 60_000
     );
-    e.startTime.setHours(hour);
+    e.startTime = new Date(e.startTime.setHours(hour, 0, 0, 0));
     e.doneTime = doneTime;
     e.proofImageUrl = "https://picsum.photos/200/300";
 
