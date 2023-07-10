@@ -17,6 +17,7 @@ import {
   OptionalEventModel,
   EventModel,
 } from "../src/models";
+import { newsSeeds as news } from "./data/news";
 
 const admin: IRegisterParams = {
   username: "admin",
@@ -56,18 +57,18 @@ const patient: {
   },
 };
 
-const news: OptionalNewsModel[] = Array(7)
-  .fill({})
-  .map((_) => {
-    return {
-      title: faker.lorem.sentence(),
-      content: faker.lorem.paragraphs({
-        min: 3,
-        max: 5,
-      }),
-      imageUrl: "https://picsum.photos/200/300",
-    };
-  });
+// const news: OptionalNewsModel[] = Array(7)
+//   .fill({})
+//   .map((_) => {
+//     return {
+//       title: faker.lorem.sentence(),
+//       content: faker.lorem.paragraphs({
+//         min: 3,
+//         max: 5,
+//       }),
+//       imageUrl: "https://picsum.photos/200/300",
+//     };
+//   });
 
 const events: OptionalEventModel[] = Array(10)
   .fill({})
