@@ -149,16 +149,6 @@ const seedEvent = async (props: { careRelationId: string }) => {
   ];
 
   const doneEvents = filledId.map((e, idx) => {
-    if (idx + 1 >= DONE_THRESHOLD) {
-      return e;
-    }
-
-    const doneTime = new Date(
-      e.startTime.getTime() + Math.random() * 120 * 60_000
-    );
-    e.doneTime = doneTime;
-    e.proofImageUrl = "https://picsum.photos/200/300";
-
     const randOps = Math.floor(Math.random() * opsEvent.length);
     const { title, description, hour, ringtoneType } = opsEvent[randOps];
 
@@ -166,6 +156,17 @@ const seedEvent = async (props: { careRelationId: string }) => {
     e.description = description;
     e.startTime.setHours(hour);
     e.ringtoneType = ringtoneType;
+
+    if (idx + 1 >= DONE_THRESHOLD) {
+      return e;
+    }
+
+    const doneTime = new Date(
+      e.startTime.getTime() + Math.random() * 120 * 60_000
+    );
+    e.startTime.setHours(hour);
+    e.doneTime = doneTime;
+    e.proofImageUrl = "https://picsum.photos/200/300";
 
     return e;
   });
