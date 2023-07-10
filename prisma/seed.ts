@@ -1,4 +1,4 @@
-import { PrismaClient, Role } from "@prisma/client";
+import { Role } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 import { IRegisterParams } from "../src/usecases";
 import { prisma } from "../src/services";
@@ -9,14 +9,7 @@ import {
   eventUsecase,
   careRelationUsecase,
 } from "../src/usecases";
-import {
-  LocationModel,
-  NewsModel,
-  OptionalLocationModel,
-  OptionalNewsModel,
-  OptionalEventModel,
-  EventModel,
-} from "../src/models";
+import { OptionalLocationModel, OptionalEventModel } from "../src/models";
 import { newsSeeds as news } from "./data/news";
 
 const admin: IRegisterParams = {
@@ -56,19 +49,6 @@ const patient: {
     patientId: "",
   },
 };
-
-// const news: OptionalNewsModel[] = Array(7)
-//   .fill({})
-//   .map((_) => {
-//     return {
-//       title: faker.lorem.sentence(),
-//       content: faker.lorem.paragraphs({
-//         min: 3,
-//         max: 5,
-//       }),
-//       imageUrl: "https://picsum.photos/200/300",
-//     };
-//   });
 
 const events: OptionalEventModel[] = Array(10)
   .fill({})
@@ -130,6 +110,44 @@ const seedEvent = async (props: { careRelationId: string }) => {
 
   const DONE_THRESHOLD = 4;
 
+  const opsEvent = [
+    {
+      title: "Minum obat pagi",
+      description:
+        "Minum obat batuk sesuai dengan resep dokter, pada kemasan warna hijau",
+      hour: 8,
+      ringtoneType: "Mozart",
+    },
+    {
+      title: "Makan siang",
+      description:
+        "Lakukan makan siang dengan porsi yang cukup dan buah-buahan sebagai pelengkap",
+      hour: 11,
+      ringtoneType: "Marimba",
+    },
+    {
+      title: "Minum obat sore",
+      description:
+        "Minum obat batuk sesuai dengan resep dokter, pada kemasan warna hijau",
+      hour: 17,
+      ringtoneType: "One Piece",
+    },
+    {
+      title: "Minum jus",
+      description:
+        "Minum jus buah-buahan untuk menjaga kesehatan tubuh dan meningkatkan imun",
+      hour: 15,
+      ringtoneType: "One Piece",
+    },
+    {
+      title: "Makan malam",
+      description:
+        "Lakukan makan malam dengan porsi yang cukup dan buah-buahan sebagai pelengkap",
+      hour: 19,
+      ringtoneType: "Nokia",
+    },
+  ];
+
   const doneEvents = filledId.map((e, idx) => {
     if (idx + 1 >= DONE_THRESHOLD) {
       return e;
@@ -140,6 +158,14 @@ const seedEvent = async (props: { careRelationId: string }) => {
     );
     e.doneTime = doneTime;
     e.proofImageUrl = "https://picsum.photos/200/300";
+
+    const randOps = Math.floor(Math.random() * opsEvent.length);
+    const { title, description, hour, ringtoneType } = opsEvent[randOps];
+
+    e.title = title;
+    e.description = description;
+    e.startTime.setHours(hour);
+    e.ringtoneType = ringtoneType;
 
     return e;
   });
